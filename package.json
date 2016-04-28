@@ -1,0 +1,35 @@
+{
+  "name": "coffer",
+  "version": "0.0.1",
+  "description": "A simple go-backed password store",
+  "main": "src/app/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/mnzt/coffer"
+  },
+  "keywords": [
+    "password",
+    "manager",
+    "store"
+  ],
+  "author": "MNZT <toby@nerdping.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "babelify": "^7.3.0",
+    "browser-sync": "^2.12.5",
+    "browserify": "^13.0.0",
+    "electron-prebuilt": "^0.37.7",
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.0.5",
+    "gulp-react": "^3.1.0",
+    "path": "^0.12.7",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "request": "^2.72.0"
+  }
+}
