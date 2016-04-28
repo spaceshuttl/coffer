@@ -1,7 +1,6 @@
-import React from 'react'
-import Container from './components/container'
+import ReactDOM from 'react-dom';
 
-React.render(
+ReactDOM.render(
   <p>Hello!</p>,
   document.body
 )
