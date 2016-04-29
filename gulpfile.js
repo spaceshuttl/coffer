@@ -11,7 +11,6 @@ gulp.task('less', function () {
   return gulp.src(__dirname + '/src/app/src/less/kube.less')
     .pipe(less())
     .pipe(gulp.dest(__dirname + '/src/app/dist/css'))
-    .pipe(browserSync.stream());
 });
 
 gulp.task('react', function () {
