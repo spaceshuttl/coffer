@@ -482,7 +482,7 @@ row {
   flex-basis: 100%;
   margin-bottom: 24px;
 }
-@media (max-width: 768px) {
+@media (max-width: 450px) {
   row {
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
@@ -623,7 +623,7 @@ column[offset="11"] {
 .width-12 {
   width: 100%;
 }
-@media (max-width: 768px) {
+@media (max-width: 450px) {
   row {
     margin-bottom: 0;
   }
@@ -685,7 +685,7 @@ blocks[cols="5"] > div {
 blocks[cols="6"] > div {
   width: 14.47234043%;
 }
-@media (max-width: 768px) {
+@media (max-width: 450px) {
   blocks {
     display: block;
     margin-left: 0;
@@ -777,7 +777,7 @@ table.table-stroked th {
 table.table-stripped tbody tr:nth-child(odd) td {
   background: #f8f8f8;
 }
-@media (max-width: 768px) {
+@media (max-width: 450px) {
   table.table-responsive {
     border: 0;
   }
@@ -1031,7 +1031,7 @@ legend {
   width: auto;
   display: inline-block;
 }
-@media (max-width: 768px) {
+@media (max-width: 450px) {
   .forms .label-top {
     padding-top: 0;
   }
@@ -2094,12 +2094,12 @@ a.color-black:hover {
 a.color-white:hover {
   color: rgba(255, 255, 255, 0.6);
 }
-@media (max-width: 768px) {
+@media (max-width: 450px) {
   .hide-for-small {
     display: none;
   }
 }
-@media (min-width: 768px) {
+@media (min-width: 450px) {
   .show-for-small {
     display: none;
   }

@@ -9,12 +9,14 @@ Coffer stores all passwords within a local file. All transations to the file are
 
 ### Backend
 - [ ] Encrypt disk transactions
-- [ ] Write test + fuzz the endpoints
+- [ ] Write test + fuzz the endpoint
 
 ### Frontend
-- [ ] Write up html structure
-- [ ] Write React components
+- [X] Write up html structure
+- [X] Write React components
 - [ ] Experiment with AJAX vs WebSockets
+- [ ] Implement Flux data store
+  - [ ] Bind WS/AJAX calls to flux store for seemless data sync
 
 ### Meta
 - [ ] Create unison build system

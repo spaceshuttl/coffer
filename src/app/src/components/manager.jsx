@@ -50,6 +50,7 @@ class PasswordList extends React.Component {
     super(props);
     this.state = {count: props.initialCount};
 
+    // TODO(mnzt): turn state into a flux store
     this.state.accounts = [
       {
         key: "Facebook",
@@ -93,8 +94,8 @@ class PasswordListEntry extends React.Component {
   }
 
   deleteEntry(key) {
-    // dispatch delete
     console.log('deleting entry: ' + key)
+    // TODO(mnzt): dispatch flux call to delete locally
   }
 
   render() {
