@@ -1,4 +1,3 @@
-# Coffer
 *Coffer is very much in development - and should not be used seriously.*
 
 ![](https://a.pomf.cat/sckujj.png)
