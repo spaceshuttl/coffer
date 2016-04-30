@@ -1,7 +1,6 @@
-# Coffer
 *Coffer is very much in development - and should not be used seriously.*
 
-![](https://a.pomf.cat/sckujj.png)
+![](https://a.pomf.cat/uoepfd.png)
 
 Coffer is a light-weight password manager built ontop of Go's secure backend, with Electron + React serving a beautiful front-end with an  intuitive UI.
 
