@@ -35,7 +35,9 @@
   },
   "dependencies": {
     "react": "^15.0.1",
-    "request": "^2.72.0"
+    "request": "^2.72.0",
+    "socket.io-client": "^1.4.5",
+    "ws": "^1.1.0"
   },
   "browserify": {
     "transform": [

@@ -1,4 +1,8 @@
+'use strict'
+
 import React, { PropTypes } from 'react'
+
+var ws = new WebSocket("ws://localhost:5050");
 
 class PasswordListAdd extends React.Component {
 
@@ -6,6 +10,7 @@ class PasswordListAdd extends React.Component {
     super(props)
     this.state = props.initialCount
   }
+
 
   // On each key change, thes handleX functions will push the input field value to the store
   handleIdentifier(e) {
@@ -19,6 +24,14 @@ class PasswordListAdd extends React.Component {
   // handleSubmit inserts the data into store
   handleSubmit(e) {
     e.preventDefault()
+
+    // set the action tag so the server know's what's up
+    this.state.tag = "add"
+    ws.send(JSON.stringify(this.state))
+
+    this.setState(function(previousState, currentProps) {
+      return {accounts: previousState.accounts.push(this.state)};
+    });
     console.log(this.state)
   }
 
@@ -47,24 +60,27 @@ class PasswordListAdd extends React.Component {
 class PasswordList extends React.Component {
 
   constructor(props) {
-    super(props);
-    this.state = {count: props.initialCount};
+    super(props)
+    this.state = {
+      accounts: []
+    }
 
-    // TODO(mnzt): turn state into a flux store
-    this.state.accounts = [
-      {
-        key: "Facebook",
-        identifier: "Facebook",
-        password: "fish123",
-      }, {
-        key: "Twitter",
-        identifier: "Twitter",
-        password: "bears965"
+  }
+
+  componentDidMount(){
+    ws.onopen = () => ws.send(JSON.stringify({ tag: "all" }))
+    ws.onmessage = (event) => {
+      var data = JSON.parse(event.data)
+      for (var i = 0; i < data.length; i++) {
+        data[i].key = data[i].identifier
       }
-    ]
+      console.log(data);
+      this.setState({accounts: data})
+    }
   }
 
   render() {
+
     return (
     <row data-centered>
       <column cols="8">

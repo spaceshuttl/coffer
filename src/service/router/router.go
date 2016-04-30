@@ -1,16 +1,23 @@
 package router
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
+	"net/http"
 
 	"service/store"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 var (
 	// Store holds the local store
-	Store *store.Store
+	Store    *store.Store
+	upgrader = websocket.Upgrader{
+		// HACK(mnzt): We want to check origin for security reasons.
+		CheckOrigin: func(r *http.Request) bool { return true },
+	}
 )
 
 // Init will initialise the API routes
@@ -19,51 +26,92 @@ func Init(port string, store *store.Store) error {
 	if port == "" {
 		return ErrNoPort
 	}
+
 	// Set our local store
 	Store = store
 
 	// Deal with API routes
-	r := gin.Default()
-	r.GET("/", homeHandler)
-	r.GET("/retrieve/:id", retrieveHandler)
-	r.POST("/place", placeHandler)
+	http.HandleFunc("/", handler)
 
-	r.Run(":" + port)
+	if err := http.ListenAndServe(":5050", nil); err != nil {
+		// HACK(mnzt): KEEP CALM AND DON'T PANIC
+		panic(err)
+	}
+
 	return nil
 }
 
-func placeHandler(c *gin.Context) {
-	key := c.PostForm("key")
-	value := c.PostForm("value")
-
-	if err := Store.Put(&store.Field{
-		Key:   key,
-		Value: value,
-	}); err != nil {
-		c.JSON(500, err)
-	}
-
-	c.JSON(200, "OK!")
-}
-
-func homeHandler(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"key": "value",
-	})
-}
-
-func retrieveHandler(c *gin.Context) {
-	id := c.Param("id")
-	value, err := Store.Get(id)
+func handler(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		c.JSON(500, gin.H{"message": err})
+		fmt.Println(err)
+		return
+	}
+	for {
+		messageType, p, err := conn.ReadMessage()
+		if err != nil {
+			return
+		}
+
+		msg := store.Field{}
+
+		if err := json.Unmarshal(p, &msg); err != nil {
+			panic(err)
+		}
+
+		switch msg.Tag {
+		case "add":
+			err := addHandler(&msg)
+			if err != nil {
+				conn.WriteMessage(messageType, []byte("err"))
+			}
+		case "delete":
+			err := deleteHandler(&msg)
+			if err != nil {
+				conn.WriteMessage(messageType, []byte("err"))
+			}
+		case "all":
+			all, err := allHandler()
+			if err != nil {
+				conn.WriteMessage(messageType, []byte("err"))
+			}
+			ba, _ := json.Marshal(all)
+			conn.WriteMessage(messageType, ba)
+		default:
+			conn.WriteMessage(messageType, []byte("invalid tag"))
+		}
+	}
+}
+
+func addHandler(msg *store.Field) error {
+	// store password
+	fmt.Printf("adding %+v to the store", msg)
+
+	err := Store.Put(msg)
+	if err != nil {
+		return err
 	}
 
-	c.JSON(200, gin.H{
-		id: value,
-	})
+	return nil
+}
+
+func getHandler(msg *store.Field) error {
+	fmt.Printf("getting %v from the store", msg.Identifier)
+	Store.Get(msg.Identifier)
+	return nil
+}
+
+func deleteHandler(msg *store.Field) error {
+	//delete passwor
+	fmt.Printf("deleting %+v from the store", msg)
+	return nil
+}
+
+func allHandler() ([]*store.Field, error) {
+	return Store.GetAll()
 }
 
 var (
+	// ErrNoPort is the error returned when no port is specified
 	ErrNoPort = errors.New("error no port provided")
 )

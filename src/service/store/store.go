@@ -2,6 +2,7 @@ package store
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/boltdb/bolt"
 )
@@ -13,8 +14,9 @@ type Store struct {
 
 // Field contains data to interface with the database
 type Field struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
+	Tag        string `json:"tag,omitempty"`
+	Identifier string `json:"identifier"`
+	Password   string `json:"password"`
 }
 
 // Init will return an initialised database store
@@ -32,6 +34,33 @@ func Init() (*Store, error) {
 	return &Store{
 		db: db,
 	}, nil
+}
+
+// GetAll will iterate over all objects in the store and return them
+func (s *Store) GetAll() ([]*Field, error) {
+	var all []*Field
+	err := s.db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("store"))
+
+		// Iterate over items in sorted key order.
+		if err := b.ForEach(func(k, v []byte) error {
+			fmt.Printf("A %s is %s.\n", k, v)
+			all = append(all, &Field{
+				Identifier: string(k),
+				Password:   string(v),
+			})
+			return nil
+		}); err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return all, nil
 }
 
 // Get will retrieve a value from the store
@@ -59,8 +88,8 @@ func (s *Store) Get(key string) (*Field, error) {
 	}
 
 	return &Field{
-		Key:   key,
-		Value: value,
+		Identifier: key,
+		Password:   value,
 	}, nil
 }
 
@@ -71,7 +100,7 @@ func (s *Store) Put(in *Field) error {
 	}
 	err := s.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("store"))
-		if err := b.Put([]byte(in.Key), []byte(in.Value)); err != nil {
+		if err := b.Put([]byte(in.Identifier), []byte(in.Password)); err != nil {
 			return err
 		}
 		return nil
@@ -83,6 +112,8 @@ func (s *Store) Put(in *Field) error {
 }
 
 var (
+	// ErrEmptyKey is the error for when a key is empty
 	ErrEmptyKey = errors.New("error empty key provided")
+	// ErrNotFound is the error when a value is not found
 	ErrNotFound = errors.New("error key/value not found")
 )
