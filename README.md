@@ -5,10 +5,10 @@
 Coffer is a light-weight password manager built ontop of Go's secure backend, with Electron + React serving a beautiful front-end with an  intuitive UI.
 
 # Run me
-1) Clone the repo, `git clone https://github.com/spaceshuttl/coffer`
-2) Change into the directory and install dependencies, `cd coffer && npm install`
-3) Install Electron globally, `npm install -g electron`
-4) Run Coffer, `electron .`
+- Clone the repo, `git clone https://github.com/spaceshuttl/coffer`
+- Change into the directory and install dependencies, `cd coffer && npm install`
+- Install Electron globally, `npm install -g electron`
+- Run Coffer, `electron .`
 
 *Note: There is a unison build system coming soon, hopefully there's be just a single binary you can run.*
 
