@@ -1,6 +1,6 @@
 *Coffer is very much in development - and should not be used seriously.*
 
-![](https://a.pomf.cat/uoepfd.png)
+![](https://a.pomf.cat/pxqfjn.png)
 
 Coffer is a light-weight password manager built ontop of Go's secure backend, with Electron + React serving a beautiful front-end with an  intuitive UI.
 
@@ -18,6 +18,7 @@ Coffer stores all passwords within a local file. All transations to the file are
 - [X] Write up html structure
 - [X] Write React components
 - [X] Experiment with AJAX vs WebSockets
+- [ ] Automatically hide passwords, show on click/hover
 - [ ] Implement Flux data store
   - [ ] Bind WS/AJAX calls to flux store for seemless data sync
 
