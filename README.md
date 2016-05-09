@@ -1,4 +1,4 @@
-*Coffer is very much in development - and should not be used seriously.*
+*Coffer is very much in development - and should not be used seriously. - NO PASSWORDS ARE ENCRYPTED AS OF YET*
 
 ![](https://a.pomf.cat/pxqfjn.png)
 
