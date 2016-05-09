@@ -36,6 +36,23 @@ func Init() (*Store, error) {
 	}, nil
 }
 
+// Delete will delete an entry corresponding to the key
+func (s *Store) Delete(key string) error {
+	err := s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("store"))
+
+		err := b.Delete([]byte(key))
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetAll will iterate over all objects in the store and return them
 func (s *Store) GetAll() ([]*Field, error) {
 	var all []*Field

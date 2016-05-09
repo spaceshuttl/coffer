@@ -1,8 +1,13 @@
 'use strict'
-
 import React, { PropTypes } from 'react'
+import store from 'store'
 
+// +1 to mrtbstyle
 var ws = new WebSocket("ws://localhost:5050");
+
+store.subscribe(() =>
+  console.log(store.getState())
+)
 
 class PasswordListAdd extends React.Component {
 
@@ -29,10 +34,12 @@ class PasswordListAdd extends React.Component {
     this.state.tag = "add"
     ws.send(JSON.stringify(this.state))
 
-    this.setState(function(previousState, currentProps) {
-      return {accounts: previousState.accounts.push(this.state)};
+    console.log("dispathing " + this.state)
+    state.dispatch({
+      action: "ADD",
+      account: this.state
     });
-    console.log(this.state)
+
   }
 
   render() {
@@ -70,12 +77,20 @@ class PasswordList extends React.Component {
   componentDidMount(){
     ws.onopen = () => ws.send(JSON.stringify({ tag: "all" }))
     ws.onmessage = (event) => {
+      console.log(event.data);
+
       var data = JSON.parse(event.data)
       for (var i = 0; i < data.length; i++) {
         data[i].key = data[i].identifier
       }
-      console.log(data);
-      this.setState({accounts: data})
+
+      // HACK(mnzt): This is expensive and bad.
+      data.map((account) => {
+        state.dispatch({
+          action: "ADD",
+          account,
+        })
+      })
     }
   }
 
@@ -107,10 +122,24 @@ class PasswordListEntry extends React.Component {
   constructor(props) {
     super(props);
     this.props = props
+    this.state
   }
 
-  deleteEntry(key) {
-    console.log('deleting entry: ' + key)
+  deleteEntry(account) {
+    var payload = {
+      tag: "delete",
+      identifier: account.identifier,
+      password: null
+    }
+
+    ws.send(JSON.stringify(payload))
+
+    state.dispatch({
+      action: "DELETE",
+      account,
+    })
+
+    console.log('deleting entry: ' + payload.identifier)
     // TODO(mnzt): dispatch flux call to delete locally
   }
 
@@ -119,7 +148,7 @@ class PasswordListEntry extends React.Component {
       <tr>
         <td>{ this.props.identifier }</td>
         <td>{ this.props.password }
-          <a onClick={ this.deleteEntry.bind(this, this.props.identifier) }  href="#" className="right">
+          <a onClick={ this.deleteEntry.bind(this, this.props) }  href="#" className="right">
             <i className="fa fa-times"/>
           </a>
         </td>

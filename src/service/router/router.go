@@ -9,20 +9,28 @@ import (
 	"service/store"
 
 	"github.com/gorilla/websocket"
+	"github.com/sirupsen/logrus"
 )
 
 var (
+	// certFile = "./cert.pem"
+	// keyFile  = "./key.pem"
+
 	// Store holds the local store
-	Store    *store.Store
+	Store *store.Store
+
 	upgrader = websocket.Upgrader{
-		// HACK(mnzt): We want to check origin for security reasons.
-		CheckOrigin: func(r *http.Request) bool { return true },
+		ReadBufferSize:  4096,
+		WriteBufferSize: 4096,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
 	}
 )
 
 // Init will initialise the API routes
 func Init(port string, store *store.Store) error {
-
+	logrus.Info("Starting web server...")
 	if port == "" {
 		return ErrNoPort
 	}
@@ -33,15 +41,17 @@ func Init(port string, store *store.Store) error {
 	// Deal with API routes
 	http.HandleFunc("/", handler)
 
-	if err := http.ListenAndServe(":5050", nil); err != nil {
-		// HACK(mnzt): KEEP CALM AND DON'T PANIC
-		panic(err)
+	// if err := http.ListenAndServeTLS(":"+port, certFile, keyFile, nil); err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		logrus.Infof("Starting server on %s", port)
+		return err
 	}
 
 	return nil
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	logrus.Debugf("Received request %v", r.URL.RequestURI())
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -54,7 +64,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		msg := store.Field{}
-
 		if err := json.Unmarshal(p, &msg); err != nil {
 			panic(err)
 		}
@@ -85,7 +94,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func addHandler(msg *store.Field) error {
 	// store password
-	fmt.Printf("adding %+v to the store", msg)
+	logrus.Debugf("adding %v to the store", *msg)
 
 	err := Store.Put(msg)
 	if err != nil {
@@ -102,8 +111,9 @@ func getHandler(msg *store.Field) error {
 }
 
 func deleteHandler(msg *store.Field) error {
-	//delete passwor
-	fmt.Printf("deleting %+v from the store", msg)
+	//delete password
+	logrus.Debugf("deleting %+v from the store", *msg)
+	Store.Delete(msg.Identifier)
 	return nil
 }
 
