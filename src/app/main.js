@@ -2,6 +2,7 @@
 
 const electron = require('electron')
 const request = require('request');
+const child_process = require('child_process')
 const app = electron.app  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow  // Module to create native browser window.
 
@@ -11,24 +12,26 @@ var mainWindow = null
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
-
-  // // Send the signal to shutdown our backend
-  // request.post({
-  //   url:'http://localhost:5050',
-  //   form: {
-  //     action:'shutdown'
-  //   }},
-  //   (err, res, body) => {
-  //     if res == 200 {
-  //       app.quit()
-  //     }
-  //   })
   app.quit()
 })
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
+
+  // start the backend
+  var service = child_process.execFile("./bin/service", {
+    env: {
+      "LEVEL": "debug"
+    }
+  }, (error, stdout, stderr) => {
+    if(error) {
+      console.log(error)
+      app.quit
+    }
+  })
+
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     title: "Coffer",

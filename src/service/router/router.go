@@ -28,6 +28,12 @@ var (
 	}
 )
 
+// Response is the universal format for WS responses
+type Response struct {
+	Data  []*store.Field `json:"data"`
+	Error error          `json:"error"`
+}
+
 // Init will initialise the API routes
 func Init(port string, store *store.Store) error {
 	logrus.Info("Starting web server...")
@@ -51,57 +57,75 @@ func Init(port string, store *store.Store) error {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	logrus.Debugf("Received request %v", r.URL.RequestURI())
+	logrus.Debugf("Received request %v:\n%v", r.URL.RequestURI(), r.Body)
+	defer r.Body.Close()
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
 		return
 	}
 	for {
-		messageType, p, err := conn.ReadMessage()
+		_, p, err := conn.ReadMessage()
 		if err != nil {
 			return
 		}
 
 		msg := store.Field{}
 		if err := json.Unmarshal(p, &msg); err != nil {
-			panic(err)
+			logrus.Error(err)
 		}
 
 		switch msg.Tag {
-		case "add":
-			err := addHandler(&msg)
-			if err != nil {
-				conn.WriteMessage(messageType, []byte("err"))
-			}
-		case "delete":
-			err := deleteHandler(&msg)
-			if err != nil {
-				conn.WriteMessage(messageType, []byte("err"))
-			}
-		case "all":
+
+		case "ADD":
+			addHandler(conn, &msg)
+
+		case "DEL":
+			deleteHandler(conn, &msg)
+
+		case "ALL":
 			all, err := allHandler()
 			if err != nil {
-				conn.WriteMessage(messageType, []byte("err"))
+				logrus.Error(err)
+				conn.WriteJSON(&Response{
+					Error: err,
+				})
 			}
-			ba, _ := json.Marshal(all)
-			conn.WriteMessage(messageType, ba)
+			conn.WriteJSON(&Response{
+				Data:  all,
+				Error: nil,
+			})
 		default:
-			conn.WriteMessage(messageType, []byte("invalid tag"))
+			conn.WriteJSON(&Response{
+				Error: ErrInvalidTag,
+			})
 		}
 	}
 }
 
-func addHandler(msg *store.Field) error {
-	// store password
+func addHandler(conn *websocket.Conn, msg *store.Field) {
 	logrus.Debugf("adding %v to the store", *msg)
 
 	err := Store.Put(msg)
 	if err != nil {
-		return err
+		conn.WriteJSON(&Response{
+			Error: err,
+		})
+		return
 	}
 
-	return nil
+	all, err := Store.GetAll()
+	if err != nil {
+		conn.WriteJSON(&Response{
+			Error: err,
+		})
+		return
+	}
+
+	conn.WriteJSON(&Response{
+		Data:  all,
+		Error: nil,
+	})
 }
 
 func getHandler(msg *store.Field) error {
@@ -110,11 +134,28 @@ func getHandler(msg *store.Field) error {
 	return nil
 }
 
-func deleteHandler(msg *store.Field) error {
-	//delete password
+func deleteHandler(conn *websocket.Conn, msg *store.Field) {
 	logrus.Debugf("deleting %+v from the store", *msg)
-	Store.Delete(msg.Identifier)
-	return nil
+
+	if err := Store.Delete(msg.Identifier); err != nil {
+		conn.WriteJSON(&Response{
+			Error: err,
+		})
+		return
+	}
+
+	all, err := Store.GetAll()
+	if err != nil {
+		conn.WriteJSON(&Response{
+			Error: err,
+		})
+		return
+	}
+
+	conn.WriteJSON(&Response{
+		Data:  all,
+		Error: nil,
+	})
 }
 
 func allHandler() ([]*store.Field, error) {
@@ -122,6 +163,8 @@ func allHandler() ([]*store.Field, error) {
 }
 
 var (
+	// ErrInvalidTag is the error returned when we receive a command with an unrecognised tag
+	ErrInvalidTag = errors.New("error invalid command tag provided")
 	// ErrNoPort is the error returned when no port is specified
 	ErrNoPort = errors.New("error no port provided")
 )
