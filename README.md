@@ -18,6 +18,7 @@ Coffer stores all passwords within a local file. All transations to the file are
 - [X] Write up html structure
 - [X] Write React components
 - [X] Experiment with AJAX vs WebSockets
+- [X] Automatically hide passwords, show on click/hover
 - [ ] Implement Flux data store
   - [ ] Bind WS/AJAX calls to flux store for seemless data sync
 
