@@ -24,6 +24,12 @@ class PasswordListAdd extends React.Component {
      this.setState({password: e.target.value});
   }
 
+  handleKeypress(e) {
+    if (e.key == 'Enter') {
+      this.handleSubmit(e)
+    }
+  }
+
   // handleSubmit inserts the data into store
   handleSubmit(e) {
     e.preventDefault()
@@ -54,8 +60,19 @@ class PasswordListAdd extends React.Component {
           </row>
           <row data-centered>
             <div className="btn-append">
-              <input ref="identifier" type="text"      name="key"    placeholder="Account/site"  onChange={ this.handleIdentifier.bind(this) }/>
-              <input ref="password" type="password"  name="value"  placeholder="Password"      onChange={ this.handlePassword.bind(this) }/>
+              <input  ref="identifier"
+                      type="text"
+                      name="key"
+                      placeholder="Account/site"
+                      onChange={ this.handleIdentifier.bind(this) }
+              />
+              <input  ref="password"
+                      type="password"
+                      name="value"
+                      placeholder="Password"
+                      onChange={ this.handlePassword.bind(this) }
+                      onKeyPress={ this.handleKeypress.bind(this) }
+              />
               <span>
                 <button class="btn" onClick={ this.handleSubmit.bind(this) }>Add</button>
               </span>
