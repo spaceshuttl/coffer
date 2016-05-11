@@ -20,16 +20,16 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
 
   // start the backend
-  // var service = child_process.execFile("./bin/service", {
-  //   env: {
-  //     "LEVEL": "debug"
-  //   }
-  // }, (error, stdout, stderr) => {
-  //   if(error) {
-  //     console.log(error)
-  //     app.quit
-  //   }
-  // })
+  var service = child_process.execFile("./bin/service", {
+    env: {
+      "LEVEL": "info"
+    }
+  }, (error, stdout, stderr) => {
+    if(error) {
+      console.log(error)
+      app.quit
+    }
+  })
 
 
   // Create the browser window.

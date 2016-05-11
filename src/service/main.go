@@ -24,12 +24,14 @@ func main() {
 		logrus.Panic("envar $LEVEL was not defined.")
 	}
 
+	logrus.Info("Starting store...")
 	store, err := store.Init()
 	if err != nil {
 		logrus.Error(err)
 		os.Exit(-1)
 	}
 
+	logrus.Info("Starting router...")
 	if err := router.Init("5050", store); err != nil {
 		logrus.Error(err)
 		os.Exit(-1)

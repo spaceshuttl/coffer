@@ -26,6 +26,7 @@ Coffer stores all passwords within a local file. All transations to the file are
 
 ### Backend
 - [X] Rewrite endpoints in gorilla/websocket
+- [ ] Rewrite backend into neat unison API to be used.
 - [ ] Encrypt disk transaction
 - [ ] Write test + fuzz the endpoint
 
@@ -38,7 +39,3 @@ Coffer stores all passwords within a local file. All transations to the file are
 
 ### Meta
 - [ ] Create unison build system
-
-
-## notes - delete me
-* componentName = connect() (componentName), Now you use {dispatch} as an argument to the component and then you can use it how ever you like within that component

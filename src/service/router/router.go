@@ -61,7 +61,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		logrus.Error(err)
+		logrus.WithFields(logrus.Fields{
+			"realm": "ws upgrader",
+		}).Error(err)
 		return
 	}
 	for {
@@ -72,7 +74,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		msg := store.Field{}
 		if err := json.Unmarshal(p, &msg); err != nil {
-			logrus.Error(err)
+			logrus.WithFields(logrus.Fields{
+				"realm": "ws unmarshal",
+			}).Error(err)
 		}
 
 		switch msg.Tag {
@@ -86,7 +90,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		case "ALL":
 			all, err := allHandler()
 			if err != nil {
-				logrus.Error(err)
+				logrus.WithFields(logrus.Fields{
+					"realm": "all handler",
+				}).Error(err)
 				conn.WriteJSON(&Response{
 					Error: err,
 				})
