@@ -1215,6 +1215,40 @@ select.select-small {
 }
 /* =Buttons
 -----------------------------------------------------------------------------*/
+.btn[type="red"],
+button[type="red"] {
+  color: rgba(255, 255, 255, 0.9);
+  background: #f23d3d;
+}
+.btn[type="red"]:hover,
+button[type="red"]:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background-color: #f56d6d;
+}
+.btn[type="red"][data-disabled]:hover,
+button[type="red"][data-disabled]:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: #f23d3d;
+}
+.btn[type="red"][data-outline],
+button[type="red"][data-outline] {
+  background: none;
+  color: #f23d3d;
+  border-color: #f23d3d;
+}
+.btn[type="red"][data-outline]:hover,
+button[type="red"][data-outline]:hover {
+  background: #f23d3d;
+  border-color: #f23d3d;
+  color: rgba(255, 255, 255, 0.9);
+}
+.btn[type="red"][data-outline][data-disabled]:hover,
+button[type="red"][data-outline][data-disabled]:hover {
+  background: none;
+  border-color: #f23d3d;
+  color: #f23d3d;
+}
+/* End custom buttons*/
 .btn,
 button {
   display: inline-block;
@@ -1352,25 +1386,25 @@ button[type="black"]:hover {
   color: rgba(255, 255, 255, 0.7);
   background-color: #333333;
 }
-.btn[type="black"][disabled]:hover,
-button[type="black"][disabled]:hover {
+.btn[type="black"][data-disabled]:hover,
+button[type="black"][data-disabled]:hover {
   color: rgba(255, 255, 255, 0.9);
   background: #000;
 }
-.btn[type="black"][outline],
-button[type="black"][outline] {
+.btn[type="black"][data-outline],
+button[type="black"][data-outline] {
   background: none;
   color: #000;
   border-color: #000;
 }
-.btn[type="black"][outline]:hover,
-button[type="black"][outline]:hover {
+.btn[type="black"][data-outline]:hover,
+button[type="black"][data-outline]:hover {
   background: #000;
   border-color: #000;
   color: rgba(255, 255, 255, 0.9);
 }
-.btn[type="black"][outline][disabled]:hover,
-button[type="black"][outline][disabled]:hover {
+.btn[type="black"][data-outline][data-disabled]:hover,
+button[type="black"][data-outline][data-disabled]:hover {
   background: none;
   border-color: #000;
   color: #000;
@@ -1383,27 +1417,27 @@ button[type="primary"] {
 .btn[type="primary"]:hover,
 button[type="primary"]:hover {
   color: rgba(255, 255, 255, 0.7);
-  background-color: #5992da;
+  background-color: #4485d6;
 }
-.btn[type="primary"][disabled]:hover,
-button[type="primary"][disabled]:hover {
+.btn[type="primary"][data-disabled]:hover,
+button[type="primary"][data-disabled]:hover {
   color: rgba(255, 255, 255, 0.9);
   background: #2f77d1;
 }
-.btn[type="primary"][outline],
-button[type="primary"][outline] {
+.btn[type="primary"][data-outline],
+button[type="primary"][data-outline] {
   background: none;
   color: #2f77d1;
   border-color: #2f77d1;
 }
-.btn[type="primary"][outline]:hover,
-button[type="primary"][outline]:hover {
+.btn[type="primary"][data-outline]:hover,
+button[type="primary"][data-outline]:hover {
   background: #2f77d1;
   border-color: #2f77d1;
   color: rgba(255, 255, 255, 0.9);
 }
-.btn[type="primary"][outline][disabled]:hover,
-button[type="primary"][outline][disabled]:hover {
+.btn[type="primary"][data-outline][data-disabled]:hover,
+button[type="primary"][data-outline][data-disabled]:hover {
   background: none;
   border-color: #2f77d1;
   color: #2f77d1;
@@ -1505,10 +1539,10 @@ button[type="white"][data-outline]:hover {
   background: #e4e4e4;
   color: #000;
 }
-.label.label-default[outline],
-.badge.label-default[outline],
-.label.badge-default[outline],
-.badge.badge-default[outline] {
+.label.label-default[data-outline],
+.badge.label-default[data-outline],
+.label.badge-default[data-outline],
+.badge.badge-default[data-outline] {
   background: none;
   color: #e4e4e4;
   border-color: #e4e4e4;
@@ -1535,10 +1569,10 @@ button[type="white"][data-outline]:hover {
   background: #2f77d1;
   color: #fff;
 }
-.label.label-primary[outline],
-.badge.label-primary[outline],
-.label.badge-primary[outline],
-.badge.badge-primary[outline] {
+.label.label-primary[data-outline],
+.badge.label-primary[data-outline],
+.label.badge-primary[data-outline],
+.badge.badge-primary[data-outline] {
   background: none;
   color: #2f77d1;
   border-color: #2f77d1;
@@ -1565,10 +1599,10 @@ button[type="white"][data-outline]:hover {
   background: #d11149;
   color: #fff;
 }
-.label.label-error[outline],
-.badge.label-error[outline],
-.label.badge-error[outline],
-.badge.badge-error[outline] {
+.label.label-error[data-outline],
+.badge.label-error[data-outline],
+.label.badge-error[data-outline],
+.badge.badge-error[data-outline] {
   background: none;
   color: #d11149;
   border-color: #d11149;
@@ -1595,10 +1629,10 @@ button[type="white"][data-outline]:hover {
   background: #0A8754;
   color: #fff;
 }
-.label.label-success[outline],
-.badge.label-success[outline],
-.label.badge-success[outline],
-.badge.badge-success[outline] {
+.label.label-success[data-outline],
+.badge.label-success[data-outline],
+.label.badge-success[data-outline],
+.badge.badge-success[data-outline] {
   background: none;
   color: #0A8754;
   border-color: #0A8754;
@@ -1625,10 +1659,10 @@ button[type="white"][data-outline]:hover {
   background: #f4d31e;
   color: #000;
 }
-.label.label-warning[outline],
-.badge.label-warning[outline],
-.label.badge-warning[outline],
-.badge.badge-warning[outline] {
+.label.label-warning[data-outline],
+.badge.label-warning[data-outline],
+.label.badge-warning[data-outline],
+.badge.badge-warning[data-outline] {
   background: none;
   color: #f4d31e;
   border-color: #f4d31e;
@@ -1655,10 +1689,10 @@ button[type="white"][data-outline]:hover {
   background: #000;
   color: #fff;
 }
-.label.label-black[outline],
-.badge.label-black[outline],
-.label.badge-black[outline],
-.badge.badge-black[outline] {
+.label.label-black[data-outline],
+.badge.label-black[data-outline],
+.label.badge-black[data-outline],
+.badge.badge-black[data-outline] {
   background: none;
   color: #000;
   border-color: #000;
@@ -1685,10 +1719,10 @@ button[type="white"][data-outline]:hover {
   background: #fff;
   color: #000;
 }
-.label.label-white[outline],
-.badge.label-white[outline],
-.label.badge-white[outline],
-.badge.badge-white[outline] {
+.label.label-white[data-outline],
+.badge.label-white[data-outline],
+.label.badge-white[data-outline],
+.badge.badge-white[data-outline] {
   background: none;
   color: #fff;
   border-color: #fff;

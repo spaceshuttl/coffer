@@ -319,7 +319,7 @@
 .make-label(@back, @text) {
 	background: @back;
 	color: @text;
-	&[outline] {
+	&[data-outline] {
 		background: none;
 		color: @back;
 		border-color: @back;
@@ -344,14 +344,14 @@
 		color: rgba(255, 255, 255, .7);
 		.background-color-light(@main-color, @hover-light);
 	}
-	&[disabled] {
+	&[data-disabled] {
 
 		&:hover {
 			color: rgba(255, 255, 255, .9);
 			background: @main-color;
 		}
 	}
-	&[outline] {
+	&[data-outline] {
 		background: none;
 		color: @main-color;
 		border-color: @main-color;
@@ -361,7 +361,7 @@
 			border-color: @main-color;
 			color: rgba(255, 255, 255, .9);
 		}
-		&[disabled] {
+		&[data-disabled] {
 
 			&:hover {
 				background: none;

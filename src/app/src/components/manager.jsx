@@ -132,9 +132,9 @@ class PasswordList extends React.Component {
         <table>
           <thead>
             <tr>
-              <td className="width-5 text-centered">Account</td>
+              <td className="width-4 text-centered">Account</td>
               <td className="width-5 text-centered">Password</td>
-              <td className="width-2"></td>
+              <td className="width-3"></td>
             </tr>
           </thead>
           <tbody>
@@ -190,8 +190,11 @@ class PasswordListEntry extends React.Component {
             <button data-small data-outline onClick={ this.showPassword.bind(this) }>
               <i className="fa fa-eye"/>
             </button>
-            <button id="cpy" data-clipboard-action="copy" data-clipboard-text={ this.props.password} type="black" data-small data-outline >
+            <button type="success" id="cpy" data-clipboard-action="copy" data-clipboard-text={ this.props.password} data-small data-outline >
               <i className="fa fa-clipboard" />
+            </button>
+            <button className="btn" type="red" data-small data-outline >
+              <i className="fa fa-trash" />
             </button>
           </span>
         </td>
