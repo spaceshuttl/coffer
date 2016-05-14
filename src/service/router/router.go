@@ -1,10 +1,9 @@
 package router
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
+	"log"
 	"net/http"
+	"sync"
 
 	"service/store"
 
@@ -13,164 +12,110 @@ import (
 )
 
 var (
-	// certFile = "./cert.pem"
-	// keyFile  = "./key.pem"
-
-	// Store holds the local store
-	Store *store.Store
-
 	upgrader = websocket.Upgrader{
-		ReadBufferSize:  4096,
-		WriteBufferSize: 4096,
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin:     func(r *http.Request) bool { return true },
 	}
+
+	wg sync.WaitGroup
+
+	// ADD is the action to add an entry to the store
+	ADD = "ADD"
+	// ALL is the action to get all entries from the store
+	ALL = "ALL"
+	// GET is the action to get entries to the store
+	GET = "GET"
+	// DELETE is the action to delete an entry from the store
+	DELETE = "DELETE"
+
+	dataStore *store.Store
 )
 
-// Response is the universal format for WS responses
-type Response struct {
-	Data  []*store.Field `json:"data"`
-	Error error          `json:"error"`
+// Message is the structure of a message we will send and receive over websocket
+type Message struct {
+	Action  string       `json:"action"`
+	Payload *store.Entry `json:"payload"`
 }
 
-// Init will initialise the API routes
-func Init(port string, store *store.Store) error {
-	logrus.Info("Starting web server...")
-	if port == "" {
-		return ErrNoPort
-	}
+// Start initialises the routes and started a listener
+func Start(port string, str *store.Store) error {
+	dataStore = str
 
-	// Set our local store
-	Store = store
-
-	// Deal with API routes
 	http.HandleFunc("/", handler)
 
-	// if err := http.ListenAndServeTLS(":"+port, certFile, keyFile, nil); err != nil {
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		logrus.Infof("Starting server on %s", port)
-		return err
-	}
-
+	http.ListenAndServe(":"+port, nil)
 	return nil
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	logrus.Debugf("Received request %v:\n%v", r.URL.RequestURI(), r.Body)
-	defer r.Body.Close()
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"realm": "ws upgrader",
-		}).Error(err)
+		log.Println(err)
 		return
 	}
+
+	wg.Add(1)
+	go connhandler(conn)
+}
+
+func connhandler(conn *websocket.Conn) {
 	for {
-		_, p, err := conn.ReadMessage()
+		var m *Message
+		err := conn.ReadJSON(&m)
 		if err != nil {
 			return
 		}
 
-		msg := store.Field{}
-		if err := json.Unmarshal(p, &msg); err != nil {
-			logrus.WithFields(logrus.Fields{
-				"realm": "ws unmarshal",
-			}).Error(err)
-		}
-
-		switch msg.Tag {
-
-		case "ADD":
-			addHandler(conn, &msg)
-
-		case "DEL":
-			deleteHandler(conn, &msg)
-
-		case "ALL":
-			all, err := allHandler()
+		switch m.Action {
+		case ALL:
+			logrus.Debugf("Got WS action: %s", m.Action)
+			entries, err := dataStore.All()
 			if err != nil {
-				logrus.WithFields(logrus.Fields{
-					"realm": "all handler",
-				}).Error(err)
-				conn.WriteJSON(&Response{
-					Error: err,
-				})
+				logrus.Error(err)
+				conn.WriteJSON(err)
 			}
-			conn.WriteJSON(&Response{
-				Data:  all,
-				Error: nil,
-			})
-		default:
-			conn.WriteJSON(&Response{
-				Error: ErrInvalidTag,
-			})
+			logrus.Debugf("sending entries %+v", entries)
+			conn.WriteJSON(entries)
+
+		case ADD:
+			logrus.Debugf("Got WS action: %s", m.Action)
+			err := dataStore.Put(m.Payload)
+			if err != nil {
+				logrus.Error(err)
+				conn.WriteJSON(err)
+			}
+			// HACK: resend them the updated store
+			entries, err := dataStore.All()
+			if err != nil {
+				logrus.Error(err)
+				conn.WriteJSON(err)
+			}
+			conn.WriteJSON(entries)
+
+		case DELETE:
+			logrus.Debugf("Got WS action: %s", m.Action)
+			err := dataStore.Delete(m.Payload)
+			if err != nil {
+				logrus.Error(err)
+				conn.WriteJSON(err)
+			}
+			// HACK: resend them the updated store
+			entries, err := dataStore.All()
+			if err != nil {
+				logrus.Error(err)
+				conn.WriteJSON(err)
+			}
+			conn.WriteJSON(entries)
+
+			// case GET:
+			// logrus.Debugf("Got WS action: %s", m.Action)
+			// entries, err := dataStore.All()
+			// if err != nil {
+			// 	conn.WriteJSON(err)
+			// }
+			// conn.WriteJSON(entries)
 		}
+
 	}
 }
-
-func addHandler(conn *websocket.Conn, msg *store.Field) {
-	logrus.Debugf("adding %v to the store", *msg)
-
-	err := Store.Put(msg)
-	if err != nil {
-		conn.WriteJSON(&Response{
-			Error: err,
-		})
-		return
-	}
-
-	all, err := Store.GetAll()
-	if err != nil {
-		conn.WriteJSON(&Response{
-			Error: err,
-		})
-		return
-	}
-
-	conn.WriteJSON(&Response{
-		Data:  all,
-		Error: nil,
-	})
-}
-
-func getHandler(msg *store.Field) error {
-	fmt.Printf("getting %v from the store", msg.Identifier)
-	Store.Get(msg.Identifier)
-	return nil
-}
-
-func deleteHandler(conn *websocket.Conn, msg *store.Field) {
-	logrus.Debugf("deleting %+v from the store", *msg)
-
-	if err := Store.Delete(msg.Identifier); err != nil {
-		conn.WriteJSON(&Response{
-			Error: err,
-		})
-		return
-	}
-
-	all, err := Store.GetAll()
-	if err != nil {
-		conn.WriteJSON(&Response{
-			Error: err,
-		})
-		return
-	}
-
-	conn.WriteJSON(&Response{
-		Data:  all,
-		Error: nil,
-	})
-}
-
-func allHandler() ([]*store.Field, error) {
-	return Store.GetAll()
-}
-
-var (
-	// ErrInvalidTag is the error returned when we receive a command with an unrecognised tag
-	ErrInvalidTag = errors.New("error invalid command tag provided")
-	// ErrNoPort is the error returned when no port is specified
-	ErrNoPort = errors.New("error no port provided")
-)

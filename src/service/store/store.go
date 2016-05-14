@@ -1,152 +1,189 @@
 package store
 
 import (
-	"errors"
+	"encoding/json"
+	"os"
 
 	"github.com/boltdb/bolt"
+	"github.com/sirupsen/logrus"
 )
 
 var (
-	// Master holds the master password for encryption
-	Master string
+	path, _ = os.Getwd()
+
+	bucket = []byte("store")
 )
 
-// Store is a wrapper around Bolt's database
+// Datastore is the interface for a store
+type Datastore interface {
+	All() ([]*Entry, error)
+	Put(e *Entry) error
+	Delete(id *Entry) error
+}
+
+// Store holds the Bolt database
 type Store struct {
-	db *bolt.DB
+	DB *bolt.DB
 }
 
-// Field contains data to interface with the database
-type Field struct {
-	Tag        string `json:"tag,omitempty"`
-	Identifier string `json:"identifier"`
-	Password   string `json:"password"`
+// Entry is the format of a database entry
+type Entry struct {
+	ID    string `json:"key"`
+	Key   string `json:"identifier"`
+	Value string `json:"value"`
 }
 
-// Init will return an initialised database store
-func Init() (*Store, error) {
-	db, err := bolt.Open("./store.bolt", 0666, nil)
+/**
+ *	Store functions:
+ */
+
+// Start will load the database file ready for transactions
+func Start() (*Store, error) {
+	db, err := bolt.Open("store.bolt", 0666, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	Master = "a very very very very secret key"
-
-	db.Update(func(tx *bolt.Tx) error {
-		tx.CreateBucketIfNotExists([]byte("store"))
-		return nil
-	})
-
 	return &Store{
-		db: db,
+		DB: db,
 	}, nil
 }
 
-// Delete will delete an entry corresponding to the key
-func (s *Store) Delete(key string) error {
-	err := s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("store"))
+// All will return all entries from the database
+func (s *Store) All() ([]*Entry, error) {
+	var entries []*Entry
 
-		err := b.Delete([]byte(key))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	if err != nil {
-		return err
-	}
-	return nil
-}
+	// Read the store
+	err := s.DB.View(func(tx *bolt.Tx) error {
 
-// GetAll will iterate over all objects in the store and return them
-func (s *Store) GetAll() ([]*Field, error) {
-	var all []*Field
-	err := s.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("store"))
+		// Open our master bucket
+		bucket := tx.Bucket(bucket)
 
-		// Iterate over items in sorted key order.
-		if err := b.ForEach(func(k, v []byte) error {
-			dec, err := decrypt(Master, string(v))
+		// Range over all key/values in our master bucket
+		err := bucket.ForEach(func(k, v []byte) error {
+			var entry Entry
+
+			// Open an account bucket
+			logrus.Debugf("Opening bucket %s", k)
+			entry.ID = string(k)
+
+			bkt := bucket.Bucket(k)
+			err := bkt.ForEach(func(k, v []byte) error {
+
+				switch string(k) {
+				case "key":
+					entry.Key = string(v)
+				case "value":
+					entry.Value = string(v)
+				}
+
+				return nil
+			})
+
+			// Add our found entry to the slice
+			entries = append(entries, &entry)
+
 			if err != nil {
 				return err
 			}
-			all = append(all, &Field{
-				Identifier: string(k),
-				Password:   dec,
-			})
+
 			return nil
-		}); err != nil {
+		})
+		if err != nil {
 			return err
 		}
 
 		return nil
 	})
+
+	// Check if our transaction errored
 	if err != nil {
 		return nil, err
 	}
 
-	return all, nil
+	return entries, nil
 }
 
-// Get will retrieve a value from the store
-func (s *Store) Get(key string) (*Field, error) {
-	var value string
+// Put will place an entry into the store
+func (s *Store) Put(e *Entry) error {
+	// Update the store
+	err := s.DB.Update(func(tx *bolt.Tx) error {
 
-	bKey := []byte(key)
-	if bKey == nil {
-		return nil, ErrEmptyKey
-	}
-
-	err := s.db.View(func(tx *bolt.Tx) error {
-
-		b := tx.Bucket([]byte("store"))
-		// HACK(mnzt): expensive on memory
-		v := b.Get(bKey)
-		if v == nil {
-			return ErrNotFound
+		// Open our bucket
+		masterBucket, err := tx.CreateBucketIfNotExists(bucket)
+		if err != nil {
+			return err
 		}
-		value = string(v)
+
+		// Create our key-specific bucket
+		bucket, err := masterBucket.CreateBucketIfNotExists(e.bucketID())
+		if err != nil {
+			return err
+		}
+
+		err = bucket.Put([]byte("key"), toStore(e.Key))
+		if err != nil {
+			return err
+		}
+
+		err = bucket.Put([]byte("value"), toStore(e.Value))
+		if err != nil {
+			return err
+		}
+
 		return nil
 	})
-	if err != nil {
-		return nil, err
-	}
 
-	return &Field{
-		Identifier: key,
-		Password:   value,
-	}, nil
-}
-
-// Put will place a field into the database
-func (s *Store) Put(in *Field) error {
-	var err error
-	if in == nil {
-		return ErrEmptyKey
-	}
-
-	in, err = encrypt(Master, in)
+	// Check if the transaction errored
 	if err != nil {
 		return err
 	}
 
-	err = s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("store"))
-		if err = b.Put([]byte(in.Identifier), []byte(in.Password)); err != nil {
+	// Return A-OK on that transaction
+	return nil
+}
+
+// Delete will remove an entry from the store
+func (s *Store) Delete(e *Entry) error {
+	err := s.DB.Update(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket(bucket)
+
+		// Delete the entry bucket
+		logrus.Debugf("deleting bucket %s", e.ID)
+		err := bucket.DeleteBucket(toStore(e.ID))
+		if err != nil {
 			return err
 		}
+
 		return nil
 	})
+
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-var (
-	// ErrEmptyKey is the error for when a key is empty
-	ErrEmptyKey = errors.New("error empty key provided")
-	// ErrNotFound is the error when a value is not found
-	ErrNotFound = errors.New("error key/value not found")
-)
+/**
+ *  Helpers:
+ */
+
+// toStore converts a string to a byte slice
+func toStore(e string) []byte {
+	return []byte(e)
+}
+
+// bucketID returns the ID for an entries' bucket
+func (e *Entry) bucketID() []byte {
+	return []byte(e.ID)
+}
+
+// Marshal returns the string values of an entry
+func (e *Entry) Marshal() ([]byte, error) {
+	return json.Marshal(e)
+}
+
+// Unmarshal will unmarshal a byte array onto an entry type
+func Unmarshal(d []byte, v interface{}) error {
+	return json.Unmarshal(d, v)
+}

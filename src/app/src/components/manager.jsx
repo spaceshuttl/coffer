@@ -9,8 +9,9 @@ class PasswordListAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      key: "",
       identifier: "",
-      password: ""
+      value: ""
     }
   }
 
@@ -34,16 +35,18 @@ class PasswordListAdd extends React.Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    console.log(e);
+    var key = Math.random().toString(36).substring(24);
 
-    // set the action tag so the server know's what's up
-    var payload = {
-      tag: "ADD",
-      identifier: this.state.identifier,
-      password: this.state.password
+    let request = {
+      action: "ADD",
+      payload: {
+        key,
+        identifier: this.state.identifier,
+        value: this.state.password
+      }
     }
 
-    ws.send(JSON.stringify(payload))
+    ws.send(JSON.stringify(request))
 
    // reset the form
    ReactDOM.findDOMNode(this.refs.identifier).value = ""; // Unset the value
@@ -93,29 +96,25 @@ class PasswordList extends React.Component {
       accounts: []
     }
 
+    let request = {
+      action: "ALL"
+    }
+
     ws.onopen = () => {
-      ws.send(JSON.stringify({
-        tag: "ALL"
-      }))
+      ws.send(JSON.stringify(request))
     }
   }
 
   componentDidMount() {
     ws.addEventListener('message', (event) => {
-      var response = JSON.parse(event.data)
+      let response = JSON.parse(event.data)
 
-      if (response.error) {
-        console.error(data)
-      }
-
-      var data = response.data
-
-      data.map((account) => {
-        account.key = account.identifier
-      })
-
+      // TODO(mnzt): implement error handling
+      // if (response.error) {
+      //   console.error(data)
+      // }
       this.setState({
-        accounts: data
+        accounts: response
       })
 
     })
@@ -124,7 +123,7 @@ class PasswordList extends React.Component {
   render() {
 
     let accounts = this.state.accounts.map((account) => {
-      return <PasswordListEntry key={ account.key } identifier={ account.identifier } password={ account.password }/>
+      return <PasswordListEntry key={ account.key } _key={ account.key } identifier={ account.identifier } password={ account.value }/>
     })
 
     return (
@@ -133,8 +132,9 @@ class PasswordList extends React.Component {
         <table>
           <thead>
             <tr>
-              <td class="width-6">Account</td>
-              <td class="width-6">Password</td>
+              <td className="width-5 text-centered">Account</td>
+              <td className="width-5 text-centered">Password</td>
+              <td className="width-2"></td>
             </tr>
           </thead>
           <tbody>
@@ -151,29 +151,49 @@ class PasswordListEntry extends React.Component {
   constructor(props) {
     super(props);
     this.props = props
-    this.state
+    this.state = {
+      display: { WebkitTextSecurity: 'disc' }
+    }
   }
 
   deleteEntry(account) {
-    var payload = {
-      tag: "DEL",
-      identifier: account.identifier,
-      password: null
+    let data = {
+      action: "DELETE",
+      payload: {
+        key: account._key,
+      }
     }
 
-    ws.send(JSON.stringify(payload))
+    console.log(data)
+    ws.send(JSON.stringify(data))
+  }
 
-    console.log('deleting entry: ' + payload.identifier)
+  showPassword(event) {
+    if (JSON.stringify(this.state.display) === JSON.stringify({WebkitTextSecurity: "none"})) {
+      this.setState({display: { WebkitTextSecurity: "disc" }})
+      return
+    }
+    this.setState({display: { WebkitTextSecurity: "none" }})
   }
 
   render() {
     return (
       <tr>
-        <td>{ this.props.identifier }</td>
-        <td>{ this.props.password }
-          <a onClick={ this.deleteEntry.bind(this, this.props) }  href="#" className="right">
-            <i className="fa fa-times"/>
-          </a>
+        <td>
+          { this.props.identifier }
+        </td>
+        <td ref={this.props._key} style={ this.state.display }>
+          { this.props.password }
+        </td>
+        <td>
+          <span className="btn-group right">
+            <button data-small data-outline onClick={ this.showPassword.bind(this) }>
+              <i className="fa fa-eye"/>
+            </button>
+            <button id="cpy" data-clipboard-action="copy" data-clipboard-text={ this.props.password} type="black" data-small data-outline >
+              <i className="fa fa-clipboard" />
+            </button>
+          </span>
         </td>
       </tr>
     )
