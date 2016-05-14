@@ -178,7 +178,7 @@ class PasswordListEntry extends React.Component {
 
   render() {
     return (
-      <tr>
+      <tr className="big">
         <td>
           { this.props.identifier }
         </td>
@@ -193,7 +193,7 @@ class PasswordListEntry extends React.Component {
             <button type="success" id="cpy" data-clipboard-action="copy" data-clipboard-text={ this.props.password} data-small data-outline >
               <i className="fa fa-clipboard" />
             </button>
-            <button className="btn" type="red" data-small data-outline >
+            <button className="btn" type="red" data-small data-outline onClick={ this.deleteEntry.bind(this, this.props) }>
               <i className="fa fa-trash" />
             </button>
           </span>
