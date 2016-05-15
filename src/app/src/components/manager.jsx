@@ -46,12 +46,19 @@ class PasswordListAdd extends React.Component {
       }
     }
 
-    ws.send(JSON.stringify(request))
+    // check the fields are not empty
+    console.log(this.state);
+    if (this.state.password === undefined || this.state.identifier === "") {
+      console.log("no entries in field");
+      // Send flash notification warning of empty fields
+    } else {
+      console.log("adding to store");
+      ws.send(JSON.stringify(request))
 
-   // reset the form
-   ReactDOM.findDOMNode(this.refs.identifier).value = ""; // Unset the value
-   ReactDOM.findDOMNode(this.refs.password).value = ""; // Unset the value
-
+      // reset the form
+      ReactDOM.findDOMNode(this.refs.identifier).value = ""; // Unset the value
+      ReactDOM.findDOMNode(this.refs.password).value = ""; // Unset the value
+    }
   }
 
   render() {
