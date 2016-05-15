@@ -1,7 +1,6 @@
 'use strict'
 
 const electron = require('electron')
-const request = require('request');
 const child_process = require('child_process')
 const coffer = electron.app  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow  // Module to create native browser window.
