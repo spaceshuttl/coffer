@@ -14,12 +14,6 @@
 			"branch": "master"
 		},
 		{
-			"importpath": "github.com/gin-gonic/gin",
-			"repository": "https://github.com/gin-gonic/gin",
-			"revision": "542be2fe77724f800fcab7eb6c01a4e597fb8506",
-			"branch": "develop"
-		},
-		{
 			"importpath": "github.com/golang/protobuf/proto",
 			"repository": "https://github.com/golang/protobuf",
 			"revision": "7cc19b78d562895b13596ddce7aafb59dd789318",

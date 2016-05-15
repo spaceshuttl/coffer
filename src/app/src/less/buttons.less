@@ -2,6 +2,8 @@
 -----------------------------------------------------------------------------*/
 .btn,
 button {
+	.transition(all .17s ease-in-out);
+
 	display: inline-block;
 	vertical-align: top;
 
@@ -121,7 +123,7 @@ button {
 		.make-btn(#000, 20);
 	}
 	&[type="primary"] {
-		.make-btn(@color-primary, 10);
+		.make-btn(@color-primary);
 	}
 	&[type="white"] {
 		background: #fff;

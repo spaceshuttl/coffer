@@ -2,11 +2,10 @@ package main
 
 import (
 	"os"
-
-	"github.com/sirupsen/logrus"
-
 	"service/router"
 	"service/store"
+
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -21,18 +20,19 @@ func main() {
 	case "info":
 		logrus.SetLevel(logrus.InfoLevel)
 	default:
-		logrus.Panic("envar $LEVEL was not defined.")
+		logrus.SetLevel(logrus.ErrorLevel)
 	}
 
-	logrus.Info("Starting store...")
-	store, err := store.Init()
+	str, err := store.Start()
 	if err != nil {
-		logrus.Error(err)
+		logrus.WithFields(logrus.Fields{
+			"realm": "start store",
+		}).Error(err)
 		os.Exit(-1)
 	}
 
-	logrus.Info("Starting router...")
-	if err := router.Init("5050", store); err != nil {
+	err = router.Start("5050", str)
+	if err != nil {
 		logrus.Error(err)
 		os.Exit(-1)
 	}

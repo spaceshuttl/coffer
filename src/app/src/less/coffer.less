@@ -1,0 +1,19 @@
+ .password {
+    .transition(text-security .5s ease-out);
+
+    -webkit-text-security: disc;
+    -mos-text-security: disc;
+    text-security: disc;
+
+    &:hover{
+      -webkit-text-security: none;
+      -mos-text-security: none;
+      text-security: none;
+    }
+ }
+
+ .btn[type="red"],
+ button[type="red"] {
+ 	.make-btn(#f23d3d, 10);
+  .transition(all .17s ease-in-out);
+ }

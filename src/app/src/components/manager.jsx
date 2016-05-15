@@ -1,5 +1,6 @@
 'use strict'
 import React, { PropTypes } from 'react'
+import Notification from './notification.jsx'
 
 // +1 to mrtbstyle
 var ws = new WebSocket("ws://localhost:5050");
@@ -9,11 +10,11 @@ class PasswordListAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      key: "",
       identifier: "",
       password: ""
     }
   }
-
 
   // On each key change, thes handleX functions will push the input field value to the store
   handleIdentifier(e) {
@@ -34,21 +35,34 @@ class PasswordListAdd extends React.Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    console.log(e);
-
-    // set the action tag so the server know's what's up
-    var payload = {
-      tag: "ADD",
-      identifier: this.state.identifier,
-      password: this.state.password
+    var key = Math.random().toString(36).substring(24)
+    
+    let request = {
+      action: "ADD",
+      payload: {
+        key: key,
+        identifier: this.state.identifier,
+        value: this.state.password
+      }
     }
 
-    ws.send(JSON.stringify(payload))
+    // check if the fields are empty
+    console.log(request);
+    if (this.state.password === "" || this.state.identifier === "") {
+      // TODO(mnzt): Send a flash notification warning of empty fields
+    } else {
+      ws.send(JSON.stringify(request))
 
-   // reset the form
-   ReactDOM.findDOMNode(this.refs.identifier).value = ""; // Unset the value
-   ReactDOM.findDOMNode(this.refs.password).value = ""; // Unset the value
-
+      // reset the form
+      ReactDOM.findDOMNode(this.refs.identifier).value = ""; // Unset the value
+      ReactDOM.findDOMNode(this.refs.password).value = ""; // Unset the value
+      //reset the state
+      this.setState({
+        key: "",
+        identifier: "",
+        password: ""
+      })
+    }
   }
 
   render() {
@@ -74,7 +88,7 @@ class PasswordListAdd extends React.Component {
                       onKeyPress={ this.handleKeypress.bind(this) }
               />
               <span>
-                <button class="btn" onClick={ this.handleSubmit.bind(this) }>Add</button>
+                <button class="btn" onClick={ this.handleSubmit.bind(this) } data-outline>Add</button>
               </span>
             </div>
           </row>
@@ -93,29 +107,25 @@ class PasswordList extends React.Component {
       accounts: []
     }
 
+    let request = {
+      action: "ALL"
+    }
+
     ws.onopen = () => {
-      ws.send(JSON.stringify({
-        tag: "ALL"
-      }))
+      ws.send(JSON.stringify(request))
     }
   }
 
   componentDidMount() {
     ws.addEventListener('message', (event) => {
-      var response = JSON.parse(event.data)
+      let response = JSON.parse(event.data)
 
       if (response.error) {
-        console.error(data)
+        {/* TODO(mnzt): display a flash notification of the error*/}
+        console.error(response.error)
       }
-
-      var data = response.data
-
-      data.map((account) => {
-        account.key = account.identifier
-      })
-
       this.setState({
-        accounts: data
+        accounts: response.message
       })
 
     })
@@ -124,7 +134,7 @@ class PasswordList extends React.Component {
   render() {
 
     let accounts = this.state.accounts.map((account) => {
-      return <PasswordListEntry key={ account.key } identifier={ account.identifier } password={ account.password }/>
+      return <PasswordListEntry key={ account.key } _key={ account.key } identifier={ account.identifier } password={ account.value }/>
     })
 
     return (
@@ -133,8 +143,9 @@ class PasswordList extends React.Component {
         <table>
           <thead>
             <tr>
-              <td class="width-6">Account</td>
-              <td class="width-6">Password</td>
+              <td className="width-4 text-centered">Account</td>
+              <td className="width-5 text-centered">Password</td>
+              <td className="width-3"></td>
             </tr>
           </thead>
           <tbody>
@@ -151,29 +162,52 @@ class PasswordListEntry extends React.Component {
   constructor(props) {
     super(props);
     this.props = props
-    this.state
+    this.state = {
+      display: { WebkitTextSecurity: 'disc' }
+    }
   }
 
   deleteEntry(account) {
-    var payload = {
-      tag: "DEL",
-      identifier: account.identifier,
-      password: null
+    let data = {
+      action: "DELETE",
+      payload: {
+        key: account._key,
+      }
     }
 
-    ws.send(JSON.stringify(payload))
+    console.log(data)
+    ws.send(JSON.stringify(data))
+  }
 
-    console.log('deleting entry: ' + payload.identifier)
+  showPassword(event) {
+    if (JSON.stringify(this.state.display) === JSON.stringify({WebkitTextSecurity: "none"})) {
+      this.setState({display: { WebkitTextSecurity: "disc" }})
+      return
+    }
+    this.setState({display: { WebkitTextSecurity: "none" }})
   }
 
   render() {
     return (
-      <tr>
-        <td>{ this.props.identifier }</td>
-        <td>{ this.props.password }
-          <a onClick={ this.deleteEntry.bind(this, this.props) }  href="#" className="right">
-            <i className="fa fa-times"/>
-          </a>
+      <tr className="big">
+        <td>
+          { this.props.identifier }
+        </td>
+        <td ref={this.props._key} style={ this.state.display }>
+          { this.props.password }
+        </td>
+        <td>
+          <span className="btn-group right">
+            <button data-small data-outline onClick={ this.showPassword.bind(this) }>
+              <i className="fa fa-eye"/>
+            </button>
+            <button id="cpy" data-clipboard-action="copy" data-clipboard-text={ this.props.password} data-small data-outline >
+              <i className="fa fa-clipboard" />
+            </button>
+            <button className="btn" type="red" data-small data-outline onClick={ this.deleteEntry.bind(this, this.props) }>
+              <i className="fa fa-trash" />
+            </button>
+          </span>
         </td>
       </tr>
     )
