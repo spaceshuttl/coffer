@@ -1,7 +1,7 @@
 {
   "name": "coffer",
   "productName": "coffer",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A simple go-backed password store",
   "main": "coffer/main.js",
   "scripts": {
