@@ -35,19 +35,19 @@ class PasswordListAdd extends React.Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    var key = Math.random().toString(36).substring(24);
-
+    var key = Math.random().toString(36).substring(24)
+    
     let request = {
       action: "ADD",
       payload: {
-        key,
+        key: key,
         identifier: this.state.identifier,
         value: this.state.password
       }
     }
 
     // check if the fields are empty
-    console.log(this.state);
+    console.log(request);
     if (this.state.password === "" || this.state.identifier === "") {
       // TODO(mnzt): Send a flash notification warning of empty fields
     } else {
@@ -122,7 +122,7 @@ class PasswordList extends React.Component {
 
       if (response.error) {
         {/* TODO(mnzt): display a flash notification of the error*/}
-        console.error(data)
+        console.error(response.error)
       }
       this.setState({
         accounts: response.message

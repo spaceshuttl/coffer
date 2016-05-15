@@ -1,3 +1,4 @@
+'use strict'
 const gulp        = require('gulp');
 const less        = require('gulp-less');
 const react       = require('gulp-react');
@@ -23,7 +24,6 @@ gulp.task('react', function () {
   })
   .transform(babelify, {presets: ["es2015", "react"]})
   .bundle()
-  // .pipe(uglify())
   .pipe(source('bundle.js'))
   .pipe(gulp.dest(__dirname + '/dist/coffer/js'));
 });

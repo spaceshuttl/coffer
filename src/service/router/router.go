@@ -95,7 +95,9 @@ func connhandler(conn *websocket.Conn) {
 			err := dataStore.Put(m.Payload)
 			if err != nil {
 				logrus.Error(err)
-				conn.WriteJSON(err)
+				conn.WriteJSON(Response{
+					Error: err,
+				})
 			}
 			// HACK: resend them the updated store
 			entries, err := dataStore.All()
@@ -116,8 +118,7 @@ func connhandler(conn *websocket.Conn) {
 			if err != nil {
 				logrus.Error(err)
 				conn.WriteJSON(Response{
-					Error:   err,
-					Message: nil,
+					Error: err,
 				})
 			}
 

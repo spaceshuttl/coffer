@@ -25,11 +25,15 @@ func main() {
 
 	str, err := store.Start()
 	if err != nil {
-		panic(err)
+		logrus.WithFields(logrus.Fields{
+			"realm": "start store",
+		}).Error(err)
+		os.Exit(-1)
 	}
 
 	err = router.Start("5050", str)
 	if err != nil {
+		logrus.Error(err)
 		os.Exit(-1)
 	}
 }

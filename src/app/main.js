@@ -1,5 +1,4 @@
 'use strict'
-
 const electron = require('electron')
 const child_process = require('child_process')
 const coffer = electron.app  // Module to control application life.
@@ -21,7 +20,7 @@ coffer.on('ready', function() {
   // start the backend
   var service = child_process.execFile(__dirname + "/service", {
     env: {
-      "LEVEL": "error"
+      "LEVEL": "debug"
     }
   }, (error, stdout, stderr) => {
     if(error) {
