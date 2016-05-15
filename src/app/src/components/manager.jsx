@@ -109,12 +109,12 @@ class PasswordList extends React.Component {
     ws.addEventListener('message', (event) => {
       let response = JSON.parse(event.data)
 
-      // TODO(mnzt): implement error handling
-      // if (response.error) {
-      //   console.error(data)
-      // }
+      if (response.error) {
+        {/* TODO(mnzt): display a flash notification of the error*/}
+        console.error(data)
+      }
       this.setState({
-        accounts: response
+        accounts: response.message
       })
 
     })

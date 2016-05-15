@@ -38,6 +38,12 @@ type Message struct {
 	Payload *store.Entry `json:"payload"`
 }
 
+// Response is the strict message structure in which we send responses to the client
+type Response struct {
+	Error   error          `json:"error"`
+	Message []*store.Entry `json:"message"`
+}
+
 // Start initialises the routes and started a listener
 func Start(port string, str *store.Store) error {
 	dataStore = str
@@ -73,10 +79,16 @@ func connhandler(conn *websocket.Conn) {
 			entries, err := dataStore.All()
 			if err != nil {
 				logrus.Error(err)
-				conn.WriteJSON(err)
+				conn.WriteJSON(Response{
+					Error:   err,
+					Message: entries,
+				})
 			}
 			logrus.Debugf("sending entries %+v", entries)
-			conn.WriteJSON(entries)
+			conn.WriteJSON(Response{
+				Error:   err,
+				Message: entries,
+			})
 
 		case ADD:
 			logrus.Debugf("Got WS action: %s", m.Action)
@@ -89,33 +101,39 @@ func connhandler(conn *websocket.Conn) {
 			entries, err := dataStore.All()
 			if err != nil {
 				logrus.Error(err)
-				conn.WriteJSON(err)
+				conn.WriteJSON(Response{
+					Error:   err,
+					Message: entries,
+				})
 			}
-			conn.WriteJSON(entries)
-
+			conn.WriteJSON(Response{
+				Error:   err,
+				Message: entries,
+			})
 		case DELETE:
 			logrus.Debugf("Got WS action: %s", m.Action)
 			err := dataStore.Delete(m.Payload)
 			if err != nil {
 				logrus.Error(err)
-				conn.WriteJSON(err)
+				conn.WriteJSON(Response{
+					Error:   err,
+					Message: nil,
+				})
 			}
+
 			// HACK: resend them the updated store
 			entries, err := dataStore.All()
 			if err != nil {
 				logrus.Error(err)
-				conn.WriteJSON(err)
+				conn.WriteJSON(Response{
+					Error:   err,
+					Message: entries,
+				})
 			}
-			conn.WriteJSON(entries)
-
-			// case GET:
-			// logrus.Debugf("Got WS action: %s", m.Action)
-			// entries, err := dataStore.All()
-			// if err != nil {
-			// 	conn.WriteJSON(err)
-			// }
-			// conn.WriteJSON(entries)
+			conn.WriteJSON(Response{
+				Error:   err,
+				Message: entries,
+			})
 		}
-
 	}
 }
