@@ -51,7 +51,7 @@ func Start() (*Store, error) {
 
 // All will return all entries from the database
 func (s *Store) All() ([]*Entry, error) {
-	var entries []*Entry
+	entries := []*Entry{}
 
 	// Read the store
 	err := s.DB.View(func(tx *bolt.Tx) error {

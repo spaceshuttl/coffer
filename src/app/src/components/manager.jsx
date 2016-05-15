@@ -77,7 +77,7 @@ class PasswordListAdd extends React.Component {
                       onKeyPress={ this.handleKeypress.bind(this) }
               />
               <span>
-                <button class="btn" onClick={ this.handleSubmit.bind(this) }>Add</button>
+                <button class="btn" onClick={ this.handleSubmit.bind(this) } data-outline>Add</button>
               </span>
             </div>
           </row>
@@ -190,7 +190,7 @@ class PasswordListEntry extends React.Component {
             <button data-small data-outline onClick={ this.showPassword.bind(this) }>
               <i className="fa fa-eye"/>
             </button>
-            <button type="success" id="cpy" data-clipboard-action="copy" data-clipboard-text={ this.props.password} data-small data-outline >
+            <button id="cpy" data-clipboard-action="copy" data-clipboard-text={ this.props.password} data-small data-outline >
               <i className="fa fa-clipboard" />
             </button>
             <button className="btn" type="red" data-small data-outline onClick={ this.deleteEntry.bind(this, this.props) }>

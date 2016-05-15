@@ -850,6 +850,8 @@ input[type="url"],
 input[type="password"],
 textarea,
 select {
+  -moz-transition: all 0.17s ease-in-out;
+  transition: all 0.17s ease-in-out;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 1.4rem;
   padding: 0.9rem 1rem;
@@ -1215,42 +1217,10 @@ select.select-small {
 }
 /* =Buttons
 -----------------------------------------------------------------------------*/
-.btn[type="red"],
-button[type="red"] {
-  color: rgba(255, 255, 255, 0.9);
-  background: #f23d3d;
-}
-.btn[type="red"]:hover,
-button[type="red"]:hover {
-  color: rgba(255, 255, 255, 0.7);
-  background-color: #f56d6d;
-}
-.btn[type="red"][data-disabled]:hover,
-button[type="red"][data-disabled]:hover {
-  color: rgba(255, 255, 255, 0.9);
-  background: #f23d3d;
-}
-.btn[type="red"][data-outline],
-button[type="red"][data-outline] {
-  background: none;
-  color: #f23d3d;
-  border-color: #f23d3d;
-}
-.btn[type="red"][data-outline]:hover,
-button[type="red"][data-outline]:hover {
-  background: #f23d3d;
-  border-color: #f23d3d;
-  color: rgba(255, 255, 255, 0.9);
-}
-.btn[type="red"][data-outline][data-disabled]:hover,
-button[type="red"][data-outline][data-disabled]:hover {
-  background: none;
-  border-color: #f23d3d;
-  color: #f23d3d;
-}
-/* End custom buttons*/
 .btn,
 button {
+  -moz-transition: all 0.17s ease-in-out;
+  transition: all 0.17s ease-in-out;
   display: inline-block;
   vertical-align: top;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -2174,4 +2144,51 @@ a.color-white:hover {
   .show-for-print {
     display: block !important;
   }
+}
+.password {
+  -moz-transition: text-security 0.5s ease-out;
+  transition: text-security 0.5s ease-out;
+  -webkit-text-security: disc;
+  -mos-text-security: disc;
+  text-security: disc;
+}
+.password:hover {
+  -webkit-text-security: none;
+  -mos-text-security: none;
+  text-security: none;
+}
+.btn[type="red"],
+button[type="red"] {
+  color: rgba(255, 255, 255, 0.9);
+  background: #f23d3d;
+  -moz-transition: all 0.17s ease-in-out;
+  transition: all 0.17s ease-in-out;
+}
+.btn[type="red"]:hover,
+button[type="red"]:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background-color: #f56d6d;
+}
+.btn[type="red"][data-disabled]:hover,
+button[type="red"][data-disabled]:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: #f23d3d;
+}
+.btn[type="red"][data-outline],
+button[type="red"][data-outline] {
+  background: none;
+  color: #f23d3d;
+  border-color: #f23d3d;
+}
+.btn[type="red"][data-outline]:hover,
+button[type="red"][data-outline]:hover {
+  background: #f23d3d;
+  border-color: #f23d3d;
+  color: rgba(255, 255, 255, 0.9);
+}
+.btn[type="red"][data-outline][data-disabled]:hover,
+button[type="red"][data-outline][data-disabled]:hover {
+  background: none;
+  border-color: #f23d3d;
+  color: #f23d3d;
 }
