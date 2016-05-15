@@ -8,9 +8,20 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var (
+	level = os.Getenv("LEVEL")
+)
+
 func main() {
 
-	logrus.SetLevel(logrus.DebugLevel)
+	switch level {
+	case "debug":
+		logrus.SetLevel(logrus.DebugLevel)
+	case "info":
+		logrus.SetLevel(logrus.InfoLevel)
+	default:
+		logrus.SetLevel(logrus.ErrorLevel)
+	}
 
 	str, err := store.Start()
 	if err != nil {

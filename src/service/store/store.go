@@ -44,6 +44,18 @@ func Start() (*Store, error) {
 		return nil, err
 	}
 
+	// Create our master bucket
+	err = db.Update(func(tx *bolt.Tx) error {
+		_, err = tx.CreateBucketIfNotExists(bucket)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &Store{
 		DB: db,
 	}, nil
@@ -58,7 +70,6 @@ func (s *Store) All() ([]*Entry, error) {
 
 		// Open our master bucket
 		bucket := tx.Bucket(bucket)
-
 		// Range over all key/values in our master bucket
 		err := bucket.ForEach(func(k, v []byte) error {
 			var entry Entry

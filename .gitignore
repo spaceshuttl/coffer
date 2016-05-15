@@ -2,4 +2,4 @@ store.bolt
 node_modules/
 pkg/
 bin/
-*.pem
+*.asar

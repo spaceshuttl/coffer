@@ -3,7 +3,7 @@
 const electron = require('electron')
 const request = require('request');
 const child_process = require('child_process')
-const app = electron.app  // Module to control application life.
+const coffer = electron.app  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow  // Module to create native browser window.
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -11,25 +11,25 @@ const BrowserWindow = electron.BrowserWindow  // Module to create native browser
 var mainWindow = null
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function() {
-  app.quit()
+coffer.on('window-all-closed', function() {
+  coffer.quit()
 })
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-app.on('ready', function() {
+coffer.on('ready', function() {
 
   // start the backend
-  // var service = child_process.execFile("./bin/service", {
-  //   env: {
-  //     "LEVEL": "info"
-  //   }
-  // }, (error, stdout, stderr) => {
-  //   if(error) {
-  //     console.log(error)
-  //     app.quit
-  //   }
-  // })
+  var service = child_process.execFile(__dirname + "/service", {
+    env: {
+      "LEVEL": "error"
+    }
+  }, (error, stdout, stderr) => {
+    if(error) {
+      console.log(error)
+      coffer.quit
+    }
+  })
 
 
   // Create the browser window.
@@ -41,8 +41,8 @@ app.on('ready', function() {
     center: true,
   })
 
-  // and load the index.html of the app.key
-  mainWindow.loadURL('file://' + __dirname + '/dist/index.html')
+  // load the application page
+  mainWindow.loadURL('file://' + __dirname + '/index.html')
 
   // Open the DevTools.
 

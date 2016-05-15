@@ -1,5 +1,6 @@
 'use strict'
 import React, { PropTypes } from 'react'
+import Notification from './notification.jsx'
 
 // +1 to mrtbstyle
 var ws = new WebSocket("ws://localhost:5050");
@@ -11,10 +12,9 @@ class PasswordListAdd extends React.Component {
     this.state = {
       key: "",
       identifier: "",
-      value: ""
+      password: ""
     }
   }
-
 
   // On each key change, thes handleX functions will push the input field value to the store
   handleIdentifier(e) {
@@ -46,18 +46,22 @@ class PasswordListAdd extends React.Component {
       }
     }
 
-    // check the fields are not empty
+    // check if the fields are empty
     console.log(this.state);
-    if (this.state.password === undefined || this.state.identifier === "") {
-      console.log("no entries in field");
-      // Send flash notification warning of empty fields
+    if (this.state.password === "" || this.state.identifier === "") {
+      // TODO(mnzt): Send a flash notification warning of empty fields
     } else {
-      console.log("adding to store");
       ws.send(JSON.stringify(request))
 
       // reset the form
       ReactDOM.findDOMNode(this.refs.identifier).value = ""; // Unset the value
       ReactDOM.findDOMNode(this.refs.password).value = ""; // Unset the value
+      //reset the state
+      this.setState({
+        key: "",
+        identifier: "",
+        password: ""
+      })
     }
   }
 
