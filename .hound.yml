@@ -1,6 +1,0 @@
-javascript:
-        enabled: false
-eslint:
-        enabled: true
-go:           
-        enabled: true
