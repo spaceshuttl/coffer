@@ -4,21 +4,28 @@ deps:
 	npm i
 	npm i -g electron-packager
 
-build: clean deps
+test:
 	gb test
-	gb build
 
+build: clean deps
 	gulp build
 
 	rm -rf node_modules
 	npm i --production
 
-	cp bin/service dist/coffer/service
-	cp package.json dist/
 	cp -r node_modules dist/
+	cp package.json dist/
 
-pack: build
+build-linux: build
+	GOOS=linux GOARCH=amd64 gb build -P 1 -f -F
+	cp bin/service-linux-amd64 dist/coffer/service
 	electron-packager dist/ --platform=linux --arch=x64 --asar
+
+build-win: build
+	GOOS=windows GOARCH=amd64 gb build -P 1 -f -F
+	cp bin/service-windows-amd64.exe dist/coffer/service.exe
+	electron-packager dist/ --platform=win32 --arch=x64 --asar
 
 clean:
 	rm -rf coffer-*
+	rm -rf dist/

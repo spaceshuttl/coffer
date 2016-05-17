@@ -1,6 +1,7 @@
 'use strict'
 import React, { PropTypes } from 'react'
 import Notification from './notification.jsx'
+import ClassName from 'classnames'
 
 // +1 to mrtbstyle
 var ws = new WebSocket("ws://localhost:5050");
@@ -36,7 +37,7 @@ class PasswordListAdd extends React.Component {
     e.preventDefault()
 
     var key = Math.random().toString(36).substring(24)
-    
+
     let request = {
       action: "ADD",
       payload: {
@@ -104,7 +105,7 @@ class PasswordList extends React.Component {
     super()
 
     this.state = {
-      accounts: []
+            accounts: []
     }
 
     let request = {
@@ -163,6 +164,7 @@ class PasswordListEntry extends React.Component {
     super(props);
     this.props = props
     this.state = {
+      buttonOK: false,
       display: { WebkitTextSecurity: 'disc' }
     }
   }
@@ -187,24 +189,44 @@ class PasswordListEntry extends React.Component {
     this.setState({display: { WebkitTextSecurity: "none" }})
   }
 
+  confirmCopy() {
+    // HACK(mnzt): :sick: this is horrible.
+    this.setState({buttonOK: true})
+    setTimeout(function () {
+      this.setState({buttonOK: false})
+    }.bind(this), 1000)
+  }
+
   render() {
+    var btnClass = ClassName({
+      'confirmed': this.state.buttonOK,
+    });
+
     return (
       <tr className="big">
         <td>
           { this.props.identifier }
         </td>
-        <td ref={this.props._key} style={ this.state.display }>
+        <td ref={this.props._key} style={ this.state.display } onClick={ this.showPassword.bind(this) }>
           { this.props.password }
         </td>
         <td>
           <span className="btn-group right">
-            <button data-small data-outline onClick={ this.showPassword.bind(this) }>
-              <i className="fa fa-eye"/>
-            </button>
-            <button id="cpy" data-clipboard-action="copy" data-clipboard-text={ this.props.password} data-small data-outline >
+            <button
+              id="cpy"
+              className={ btnClass }
+              data-clipboard-action="copy"
+              data-clipboard-text={ this.props.password}
+              data-small data-outline
+              onClick={ this.confirmCopy.bind(this) }>
               <i className="fa fa-clipboard" />
             </button>
-            <button className="btn" type="red" data-small data-outline onClick={ this.deleteEntry.bind(this, this.props) }>
+            <button
+              className="btn"
+              type="red"
+              data-small
+              data-outline
+              onClick={ this.deleteEntry.bind(this, this.props) }>
               <i className="fa fa-trash" />
             </button>
           </span>

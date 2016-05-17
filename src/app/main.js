@@ -1,6 +1,7 @@
 'use strict'
 const electron      = require('electron')
 const child_process = require('child_process')
+const os            = require('os')
 const coffer        = electron.app  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow  // Module to create native browser window.
 
@@ -16,9 +17,18 @@ coffer.on('window-all-closed', function() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 coffer.on('ready', function() {
+  var platform = ""
+  // get our operating system
+  if (os.type() == 'Linux') {
+    platform = "/service"
+  } else if (os.type() == 'Darwin') {
+    platform = "/service"
+  } else if (os.type() == 'Windows_NT') {
+    platform = "/service.exe"
+  }
 
   // start the backend
-  var service = child_process.execFile(__dirname + "/service", {
+  var service = child_process.execFile(__dirname + platform, {
     env: {
       "LEVEL": "debug"
     }
@@ -35,7 +45,7 @@ coffer.on('ready', function() {
     title: "Coffer",
     width: 800,
     height: 600,
-    frame: false,
+    frame: true,
     center: true,
   })
 
