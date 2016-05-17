@@ -181,20 +181,20 @@ class PasswordListEntry extends React.Component {
     ws.send(JSON.stringify(data))
   }
 
-  showPassword(event) {
-    if (JSON.stringify(this.state.display) === JSON.stringify({WebkitTextSecurity: "none"})) {
-      this.setState({display: { WebkitTextSecurity: "disc" }})
-      return
-    }
-    this.setState({display: { WebkitTextSecurity: "none" }})
-  }
+  // showPassword(event) {
+  //   if (JSON.stringify(this.state.display) === JSON.stringify({WebkitTextSecurity: "none"})) {
+  //     this.setState({display: { WebkitTextSecurity: "disc" }})
+  //     return
+  //   }
+  //   this.setState({display: { WebkitTextSecurity: "none" }})
+  // }
 
   confirmCopy() {
     // HACK(mnzt): :sick: this is horrible.
     this.setState({buttonOK: true})
     setTimeout(function () {
       this.setState({buttonOK: false})
-    }.bind(this), 1000)
+    }.bind(this), 750)
   }
 
   render() {
@@ -202,12 +202,11 @@ class PasswordListEntry extends React.Component {
       'confirmed': this.state.buttonOK,
     });
 
+    {/* onHover={ this.showPassword.bind(this) }*/}
     return (
       <tr className="big">
-        <td>
-          { this.props.identifier }
-        </td>
-        <td ref={this.props._key} style={ this.state.display } onClick={ this.showPassword.bind(this) }>
+        <td>{ this.props.identifier }</td>
+        <td ref={ this.props._key  } className="password">
           { this.props.password }
         </td>
         <td>
@@ -216,17 +215,20 @@ class PasswordListEntry extends React.Component {
               id="cpy"
               className={ btnClass }
               data-clipboard-action="copy"
-              data-clipboard-text={ this.props.password}
+              data-clipboard-text={ this.props.password }
               data-small data-outline
-              onClick={ this.confirmCopy.bind(this) }>
-              <i className="fa fa-clipboard" />
+              onClick={ this.confirmCopy.bind(this) }
+            >
+              <i className="fa fa-clipboard"/>
             </button>
+
             <button
               className="btn"
               type="red"
               data-small
               data-outline
-              onClick={ this.deleteEntry.bind(this, this.props) }>
+              onClick={ this.deleteEntry.bind(this, this.props) }
+            >
               <i className="fa fa-trash" />
             </button>
           </span>
