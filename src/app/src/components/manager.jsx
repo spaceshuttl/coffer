@@ -165,7 +165,6 @@ class PasswordListEntry extends React.Component {
     this.props = props
     this.state = {
       buttonOK: false,
-      display: { WebkitTextSecurity: 'disc' }
     }
   }
 
@@ -180,14 +179,6 @@ class PasswordListEntry extends React.Component {
     console.log(data)
     ws.send(JSON.stringify(data))
   }
-
-  // showPassword(event) {
-  //   if (JSON.stringify(this.state.display) === JSON.stringify({WebkitTextSecurity: "none"})) {
-  //     this.setState({display: { WebkitTextSecurity: "disc" }})
-  //     return
-  //   }
-  //   this.setState({display: { WebkitTextSecurity: "none" }})
-  // }
 
   confirmCopy() {
     // HACK(mnzt): :sick: this is horrible.

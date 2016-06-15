@@ -16,12 +16,12 @@ build: clean deps
 	cp -r node_modules dist/
 	cp package.json dist/
 
-build-linux: build
+build-linux:
 	GOOS=linux GOARCH=amd64 gb build -P 1 -f -F
 	cp bin/service-linux-amd64 dist/coffer/service
 	electron-packager dist/ --platform=linux --arch=x64 --asar
 
-build-win: build
+build-win:
 	GOOS=windows GOARCH=amd64 gb build -P 1 -f -F
 	cp bin/service-windows-amd64.exe dist/coffer/service.exe
 	electron-packager dist/ --platform=win32 --arch=x64 --asar
