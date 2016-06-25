@@ -51,6 +51,12 @@ func Start(port string, str *store.Store) error {
 	http.HandleFunc("/", handler)
 
 	http.ListenAndServe(":"+port, nil)
+
+	// TODO(mnzt): serve WS over TLS
+	// if err := GenerateCert(); err != nil {
+	// 	return err
+	// }
+	// http.ListenAndServeTLS(addr, certFile, keyFile, handler)
 	return nil
 }
 
@@ -137,4 +143,9 @@ func connhandler(conn *websocket.Conn) {
 			})
 		}
 	}
+}
+
+func generateCerts() {
+
+	return
 }

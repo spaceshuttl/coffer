@@ -6,9 +6,16 @@ class Notification extends React.Component {
     super(props)
   }
 
+  open() {
+    inst.open()
+  }
+
+
   render(){
+    // TODO: Modal structure
     return (
-      <div className={"message message-" + this.props.level}>{this.props.message}</div>
+      <div>
+      </div>
     )
   }
 }

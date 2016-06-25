@@ -2,7 +2,9 @@ package store
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+	"os/user"
 
 	"github.com/boltdb/bolt"
 	"github.com/sirupsen/logrus"
@@ -11,7 +13,8 @@ import (
 var (
 	path, _ = os.Getwd()
 
-	bucket = []byte("store")
+	bucket    = []byte("store")
+	configDir string
 )
 
 // Datastore is the interface for a store
@@ -34,6 +37,12 @@ type Entry struct {
 	Value string `json:"value"`
 }
 
+// LoginRequest is the request we receive when a user enters their master
+// password into the front end
+type LoginRequest struct {
+	Master string `json:"master"`
+}
+
 /**
  *	Store functions:
  */
@@ -46,8 +55,16 @@ func Start() (*Store, error) {
 		return nil, err
 	}
 
+	// Create our config directory
+	usr, err := user.Current()
+	if err != nil {
+		return nil, err
+	}
+
+	configDir = fmt.Sprintf("%s/.coffer/", usr.HomeDir)
+
 	// Create our store
-	db, err := bolt.Open("store.bolt", 0666, nil)
+	db, err := bolt.Open(configDir+"store.bolt", 0666, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -69,6 +86,44 @@ func Start() (*Store, error) {
 		Crypter: crypter,
 	}, nil
 }
+
+// IsNewInstall will return whether a
+func (s *Store) IsNewInstall() bool {
+	return true
+}
+
+// Initialise will create the config dir,
+// func (s *Store) Initialise() error {
+// 	stat, err := os.Stat(configDir)
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	err := os.Mkdir(configDir, 0744)
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	err = s.DB.Update(func(tx *bolt.Tx) error {
+// 		bkt, err := tx.CreateBucketIfNotExists([]byte("meta"))
+// 		if err != nil {
+// 			return err
+// 		}
+//
+// 		err = bkt.Put([]byte("initd"), []byte("true"))
+// 		if err != nil {
+// 			return err
+// 		}
+//
+// 		return nil
+// 	})
+//
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	return nil
+// }
 
 // All will return all entries from the database
 func (s *Store) All() ([]*Entry, error) {

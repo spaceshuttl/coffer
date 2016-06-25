@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	padText = "0"
+	padText   = "0"
+	masterKey string
 )
 
 // Crypter the the top level crypter used for encrypting and decrypting store values
@@ -26,7 +27,9 @@ func InitaliaseCrypter(key string) (*Crypter, error) {
 
 	// HACK(replace this with perm usage of a master key)
 	if key == "" {
-		key = RandStringBytesMaskImprSrc(32)
+		masterKey = RandStringBytesMaskImprSrc(32)
+	} else {
+		masterKey = key
 	}
 
 	block, err := aes.NewCipher([]byte(key))
@@ -43,7 +46,7 @@ func InitaliaseCrypter(key string) (*Crypter, error) {
 // Encrypt will use the crypter's keys and other values and encrypt p
 func (c *Crypter) Encrypt(p string) (string, error) {
 
-	p = pad(p)
+	p = pad(p, -1)
 
 	ciphertext := make([]byte, aes.BlockSize+len(p))
 	iv := ciphertext[:aes.BlockSize]
@@ -56,6 +59,27 @@ func (c *Crypter) Encrypt(p string) (string, error) {
 
 	// blockmode := cipher.NewCBCEncrypter(c.block, iv)
 	henc := hex.EncodeToString(ciphertext)
+
+	// TODO: authenticated encryption
+	// block, err := aes.NewCipher([]byte(c.key))
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
+	//
+	// nonce := make([]byte, 12)
+	// if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
+	// 	panic(err.Error())
+	// }
+	//
+	// aesgcm, err := cipher.NewGCM(block)
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
+	//
+	// ciphertext := aesgcm.Seal(nil, nonce, []byte(p), nil)
+	// fmt.Printf("%x\n", ciphertext)
+	//
+	// henc := hex.EncodeToString(ciphertext)
 
 	return henc, nil
 }
@@ -84,12 +108,15 @@ func (c *Crypter) Decrypt(cipherhext string) (string, error) {
 
 	s := string(plaintext)
 
-	return unpad(s), nil
+	return unpad(string(s)), nil
 }
 
 // Pad providers a left padding function.
-func pad(text string) string {
-	length := aes.BlockSize - (len(text) % aes.BlockSize)
+func pad(text string, length int) string {
+	if length <= 0 {
+		length = aes.BlockSize - (len(text) % aes.BlockSize)
+	}
+
 	for i := 0; i < length; i++ {
 		text += padText
 	}

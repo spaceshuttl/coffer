@@ -1,6 +1,5 @@
 'use strict'
 import React, { PropTypes } from 'react'
-import Notification from './notification.jsx'
 import ClassName from 'classnames'
 
 // +1 to mrtbstyle

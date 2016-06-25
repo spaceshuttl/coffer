@@ -38,5 +38,6 @@ Coffer stores all passwords within a local file. All transations to the file are
 - [X] Bind WS calls to the store for seemless data sync
 
 ### Meta
+- [X] Add bower dependency management system
 - [X] Create unison build system
 - [-] Create cross-platform building and packing
