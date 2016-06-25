@@ -37,7 +37,7 @@ class Login extends React.Component {
    console.log(request);
 
    // on success coninue to the manager
-   this.context.router.push('manager');
+   this.props.history.push('manager');
   }
 
   render () {
