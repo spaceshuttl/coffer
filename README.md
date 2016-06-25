@@ -28,6 +28,7 @@ Coffer stores all passwords within a local file. All transations to the file are
 - [X] Rewrite endpoints in gorilla/websocket
 - [X] Rewrite backend into neat unison API to be used.
 - [X] Encrypt disk transaction
+- [ ] Add SSL support to the WS connection
 - [ ] Write test + fuzz the endpoint
 
 ### Frontend
@@ -35,7 +36,7 @@ Coffer stores all passwords within a local file. All transations to the file are
 - [X] Write React components
 - [X] Experiment with AJAX vs WebSockets
 - [X] Automatically hide passwords, show on click/hover
-- [X] Bind WS calls to the store for seemless data sync
+- [ ] Implement some store to hold the WS connection
 
 ### Meta
 - [X] Add bower dependency management system

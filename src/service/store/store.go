@@ -202,25 +202,25 @@ func (s *Store) Put(e *Entry) error {
 	err = s.DB.Update(func(tx *bolt.Tx) error {
 
 		// Open our bucket
-		masterBucket, err := tx.CreateBucketIfNotExists(bucket)
-		if err != nil {
-			return err
+		masterBucket, tErr := tx.CreateBucketIfNotExists(bucket)
+		if tErr != nil {
+			return tErr
 		}
 
 		// Create our key-specific bucket
-		bucket, err := masterBucket.CreateBucketIfNotExists(e.bucketID())
-		if err != nil {
-			return err
+		bucket, tErr := masterBucket.CreateBucketIfNotExists(e.bucketID())
+		if tErr != nil {
+			return tErr
 		}
 
-		err = bucket.Put([]byte("key"), toStore(e.Key))
-		if err != nil {
-			return err
+		tErr = bucket.Put([]byte("key"), toStore(e.Key))
+		if tErr != nil {
+			return tErr
 		}
 
-		err = bucket.Put([]byte("value"), toStore(e.Value))
-		if err != nil {
-			return err
+		tErr = bucket.Put([]byte("value"), toStore(e.Value))
+		if tErr != nil {
+			return tErr
 		}
 
 		return nil

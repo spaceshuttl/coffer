@@ -1,10 +1,11 @@
 import ReactDOM from 'react-dom'
 import { Router, hashHistory, Route, IndexRoute } from 'react-router'
 
+import Container from './container'
+
 import Login from './pages/login'
 import Manager from './pages/manager'
 import About from './pages/about'
-import Container from './container'
 
 ReactDOM.render(
   <Router history={hashHistory}>
