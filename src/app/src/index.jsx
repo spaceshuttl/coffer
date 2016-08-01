@@ -14,18 +14,6 @@ ReactDOM.render(
 
     <PasswordListAdd />
     <PasswordList />
-
-    { /* Demo components */ }
-    <row data-centered>
-      <column cols="8">
-        <div className="message message-warning" style={{ position: 'relative', maxWidth: 80 + 'vw' }}>
-          Are you sure you want to <e>permanently</e> delete this? It'll be gone forever.
-          <footer>
-            <a href="#" className="btn" type="white" data-outline data-small> Yes!</a>
-          </footer>
-        </div>
-      </column>
-    </row>
   </div>,
   document.getElementById('app')
 )

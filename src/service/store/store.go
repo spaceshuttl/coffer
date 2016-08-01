@@ -23,7 +23,8 @@ type Datastore interface {
 
 // Store holds the Bolt database
 type Store struct {
-	DB *bolt.DB
+	DB      *bolt.DB
+	Crypter *Crypter
 }
 
 // Entry is the format of a database entry
@@ -39,6 +40,13 @@ type Entry struct {
 
 // Start will load the database file ready for transactions
 func Start() (*Store, error) {
+	// Initialise our crypter
+	crypter, err := InitaliaseCrypter("one really really secure key... ")
+	if err != nil {
+		return nil, err
+	}
+
+	// Create our store
 	db, err := bolt.Open("store.bolt", 0666, nil)
 	if err != nil {
 		return nil, err
@@ -57,7 +65,8 @@ func Start() (*Store, error) {
 	}
 
 	return &Store{
-		DB: db,
+		DB:      db,
+		Crypter: crypter,
 	}, nil
 }
 
@@ -112,13 +121,30 @@ func (s *Store) All() ([]*Entry, error) {
 		return nil, err
 	}
 
+	for i, entry := range entries {
+		plaintext, err := s.Crypter.Decrypt(entry.Value)
+		if err != nil {
+			return nil, err
+		}
+		entries[i].Value = plaintext
+	}
+
 	return entries, nil
 }
 
 // Put will place an entry into the store
 func (s *Store) Put(e *Entry) error {
+	// Encrypt our values
+	cipherValue, err := s.Crypter.Encrypt(e.Value)
+	if err != nil {
+		return err
+	}
+
+	// HACK(mnzt): we shouldn't really be changing values on the entry struct
+	e.Value = cipherValue
+
 	// Update the store
-	err := s.DB.Update(func(tx *bolt.Tx) error {
+	err = s.DB.Update(func(tx *bolt.Tx) error {
 
 		// Open our bucket
 		masterBucket, err := tx.CreateBucketIfNotExists(bucket)
@@ -195,6 +221,6 @@ func (e *Entry) Marshal() ([]byte, error) {
 }
 
 // Unmarshal will unmarshal a byte array onto an entry type
-func Unmarshal(d []byte, v interface{}) error {
+func (e *Entry) Unmarshal(d []byte, v interface{}) error {
 	return json.Unmarshal(d, v)
 }
