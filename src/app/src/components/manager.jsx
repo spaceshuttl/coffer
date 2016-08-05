@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react'
 import ClassName from 'classnames'
 
 // +1 to mrtbstyle
-var ws = new WebSocket("wss://localhost:5050");
+var ws = new WebSocket("ws://localhost:5050");
 
 class PasswordListAdd extends React.Component {
 
@@ -88,7 +88,7 @@ class PasswordListAdd extends React.Component {
                       onKeyPress={ this.handleKeypress.bind(this) }
               />
               <span>
-                <button class="btn" onClick={ this.handleSubmit.bind(this) } data-outline>Add</button>
+                <button className="btn" onClick={ this.handleSubmit.bind(this) } data-outline>Add</button>
               </span>
             </div>
           </row>
