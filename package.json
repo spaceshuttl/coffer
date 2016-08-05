@@ -3,9 +3,9 @@
   "productName": "coffer",
   "version": "0.0.1",
   "description": "A simple go-backed password store",
-  "main": "dist/coffer/main.js",
+  "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "electron": "electron dist/coffer",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

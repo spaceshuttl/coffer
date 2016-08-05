@@ -1,11 +1,9 @@
 'use strict'
 const electron      = require('electron')
-const child_process = require('child_process')
-const os            = require('os')
 const {BrowserWindow, app} = require('electron')
+// const child_process = require('child_process')
+// const os            = require('os')
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 var win = null
 
 // Quit when all windows are closed.
@@ -40,7 +38,7 @@ app.on('ready', function() {
 
 
   // Create the browser window.
-  let win = new BrowserWindow({
+  win = new BrowserWindow({
     title: "Coffer",
     width: 800,
     height: 600,

@@ -15,9 +15,9 @@ We actively welcome PRs and love to see the community contributing to Coffer. If
   ```bash
   go get github.com/constabulary/gb/...
   ```
-- Install Electron globally for your OS
+- Install Electron + electron-packager globally for your OS
   ```bash
-  npm install -g electron
+  npm install -g electron electron-packager
   ```
 
 ## Setting up coffer
@@ -27,7 +27,8 @@ We actively welcome PRs and love to see the community contributing to Coffer. If
   cd coffer && npm install
   ```
 - Build the repo, `make build`
-- Run Coffer, `electron .`
+- Run the backend `./bin/service`
+- Run the front end, `npm run electron`
 
 *Note: There is a unison build system coming soon, hopefully there will be a single binary you can run.*
 
