@@ -17,7 +17,7 @@ Coffer is a light-weight password manager built ontop of Go's secure backend, wi
 - Install Electron globally, `npm install -g electron`
 - Run Coffer, `electron .`
 
-*Note: There is a unison build system coming soon, hopefully there's be just a single binary you can run.*
+*Note: There is a unison build system coming soon, hopefully there will be a single binary you can run.*
 
 ## Data retention
 Coffer stores all passwords within a local file. All transations to the file are encrypted with AES (tbc), so all data kept is safe.
