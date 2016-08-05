@@ -28,7 +28,7 @@ We actively welcome PRs and love to see the community contributing to Coffer. If
   ```
 - Build the repo, `make build`
 - Run the backend `./bin/service`
-- Run the front end, `npm run electron`
+- Run the front end, `npm run app`
 
 *Note: There is a unison build system coming soon, hopefully there will be a single binary you can run.*
 
