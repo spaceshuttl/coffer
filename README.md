@@ -1,26 +1,38 @@
-*Coffer is very much in development - and should not be used seriously. - NO PASSWORDS ARE ENCRYPTED AS OF YET*
+*Coffer is very much in development - and should not be used to store import information*
 
 ![](screenshot.jpg)
 
-Coffer is a light-weight password manager built ontop of Go's secure backend, with Electron + React serving a beautiful front-end with an  intuitive UI.
+Coffer is a light weight password manager built with Go, React, and Electron.
 
-# Dependencies
-- Golang
-- Electron
-- Node/NPM
-- [gb](https://getgb.io)
+# Install (TBC)
+To install Coffer you can download the pre-compiled binary from the ['releases'](https://github.com/spaceshuttl/coffer/releases/latest) section of GitHub, just select the version for your OS and architecture and download Coffer.
 
-# Run me
-- Clone the repo, `git clone https://github.com/spaceshuttl/coffer`
-- Change into the directory and install dependencies, `cd coffer && npm install`
-- Build the Go binary, `gb build all`
-- Install Electron globally, `npm install -g electron`
+# Development
+We actively welcome PRs and love to see the community contributing to Coffer. If you want to open a PR for a feature, or just want to hack on it, follow the intstructions below.
+
+## Install dependencies
+- Install GB, the vendoring Go vendoring tool
+  ```bash
+  go get github.com/constabulary/gb/...
+  ```
+- Install Electron globally for your OS
+  ```bash
+  npm install -g electron
+  ```
+
+## Setting up coffer
+- Clone the repo, `git clone https://github.com/spaceshuttl/coffer.git`
+- cd into the directory, install dependencies,
+  ```bash
+  cd coffer && npm install
+  ```
+- Build the repo, `make build`
 - Run Coffer, `electron .`
 
 *Note: There is a unison build system coming soon, hopefully there will be a single binary you can run.*
 
-## Data retention
-Coffer stores all passwords within a local file. All transations to the file are encrypted with AES (tbc), so all data kept is safe.
+# Data retention
+Coffer stores all passwords within a local file (`~/.coffer/store.bolt` by default.) All writes to the disk are encrypted with AES-256.
 
 # TODO
 
@@ -29,16 +41,15 @@ Coffer stores all passwords within a local file. All transations to the file are
 - [X] Rewrite backend into neat unison API to be used.
 - [X] Encrypt disk transaction
 - [ ] Add SSL support to the WS connection
-- [ ] Write test + fuzz the endpoint
+- [-] Write tests
 
 ### Frontend
-- [X] Write up html structure
+- [X] Write up HTML structure
 - [X] Write React components
-- [X] Experiment with AJAX vs WebSockets
+- [X] Implement WebSockets
 - [X] Automatically hide passwords, show on click/hover
 - [ ] Implement some store to hold the WS connection
 
 ### Meta
-- [X] Add bower dependency management system
-- [X] Create unison build system
-- [-] Create cross-platform building and packing
+- [ ] Add bower dependency management system
+- [ ] Create build + packing system

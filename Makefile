@@ -1,4 +1,7 @@
 deps:
+	rm -rf node_modules
+	npm i --production
+
 	go get github.com/constabulary/gb/...
 	gb vendor restore
 	npm i
@@ -7,14 +10,9 @@ deps:
 test:
 	gb test
 
-build: clean deps
+build: clean
 	gulp build
-
-	rm -rf node_modules
-	npm i --production
-
-	cp -r node_modules dist/
-	cp package.json dist/
+	gb build
 
 build-linux:
 	GOOS=linux GOARCH=amd64 gb build -P 1 -f -F
