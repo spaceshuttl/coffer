@@ -3,6 +3,7 @@ package router
 import (
 	"log"
 	"net/http"
+	"os/user"
 	"sync"
 
 	"service/store"
@@ -30,6 +31,9 @@ var (
 	DELETE = "DELETE"
 
 	dataStore *store.Store
+
+	usr, _  = user.Current()
+	baseDir = usr.HomeDir + "/coffer"
 )
 
 // Message is the structure of a message we will send and receive over websocket
@@ -50,13 +54,16 @@ func Start(port string, str *store.Store) error {
 
 	http.HandleFunc("/", handler)
 
-	http.ListenAndServe(":"+port, nil)
+	// http.ListenAndServe(":"+port, nil)
 
 	// TODO(mnzt): serve WS over TLS
-	// if err := GenerateCert(); err != nil {
+	// certFile, keyFile, err := generateCerts()
+	// if err != nil {
 	// 	return err
 	// }
-	// http.ListenAndServeTLS(addr, certFile, keyFile, handler)
+	// http.ListenAndServeTLS(":"+port, certFile, keyFile, nil)
+	http.ListenAndServe(":"+port, nil)
+
 	return nil
 }
 
@@ -145,7 +152,44 @@ func connhandler(conn *websocket.Conn) {
 	}
 }
 
-func generateCerts() {
-
-	return
-}
+// func generateCerts() (string, string, error) {
+// 	var (
+// 		certFile = baseDir + "/cert.pem"
+// 		keyFile  = baseDir + "/key.pem"
+// 	)
+// 	// rand.Seed(time.Now().Unix())
+// 	priv, err := rsa.GenerateKey(rand.Reader, 4096)
+// 	if err != nil {
+// 		return "", "", err
+// 	}
+// 	publickey := &priv.PublicKey
+//
+// 	c := &x509.Certificate{
+// 		IsCA: true,
+// 	}
+//
+// 	var parent = c
+// 	// Create a self signed certificate
+// 	cert, err := x509.CreateCertificate(rand.Reader, c, parent, publickey, priv)
+// 	if err != nil {
+// 		return "", "", err
+// 	}
+//
+// 	// pKey := x509.MarshalPKCS1PrivateKey(cert)
+// 	err = ioutil.WriteFile(certFile, cert, 0666)
+// 	if err != nil {
+// 		return "", "", err
+// 	}
+//
+// 	pubKey, err := x509.MarshalPKIXPublicKey(publickey)
+// 	if err != nil {
+// 		return "", "", err
+// 	}
+//
+// 	err = ioutil.WriteFile(keyFile, pubKey, 0666)
+// 	if err != nil {
+// 		return "", "", err
+// 	}
+//
+// 	return certFile, keyFile, nil
+// }

@@ -4,12 +4,14 @@ import { Link } from 'react-router'
 class Login extends React.Component {
   constructor(props) {
     super(props)
+    this.props = props
+    
     this.state = {
       master: "",
     }
   }
 
-  masterHandler(e) {
+  handleMaster(e) {
     e.preventDefault()
     this.setState({master: e.target.value});
   }
@@ -30,6 +32,13 @@ class Login extends React.Component {
        master: this.state.master,
      }
    }
+
+  //  ws.send(JSON.stringify(request))
+
+   console.log(request);
+
+   // on success coninue to the manager
+   this.props.history.push('manager');
   }
 
   render () {
@@ -44,10 +53,15 @@ class Login extends React.Component {
           <column cols="8" className="text-centered">
             <form className="forms">
               <section>
-                <input type="password" className="input-big"></input>
+                <input
+                  type="password"
+                  className="input-big"
+                  onChange={ this.handleMaster.bind(this) }
+                  onKeyPress={ this.handleKeypress.bind(this) }
+                ></input>
               </section>
               <section>
-                <Link to="manager">
+                <Link to="manager" onClick={this.handleSubmit.bind(this)}>
                   <button type="primary">Log in</button>
                 </Link>
               </section>

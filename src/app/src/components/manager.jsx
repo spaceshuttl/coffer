@@ -88,7 +88,7 @@ class PasswordListAdd extends React.Component {
                       onKeyPress={ this.handleKeypress.bind(this) }
               />
               <span>
-                <button class="btn" onClick={ this.handleSubmit.bind(this) } data-outline>Add</button>
+                <button className="btn" onClick={ this.handleSubmit.bind(this) } data-outline>Add</button>
               </span>
             </div>
           </row>
