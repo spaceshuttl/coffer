@@ -78,6 +78,10 @@ func connhandler(conn *websocket.Conn) {
 			logrus.Error(err)
 		}
 
+		if m == nil {
+			continue
+		}
+
 		switch m.Action {
 		case ALL:
 			resp, err := handleAll(m)
@@ -104,7 +108,6 @@ func connhandler(conn *websocket.Conn) {
 			conn.WriteJSON(Response{
 				Error: ErrInvalidAction,
 			})
-
 		}
 	}
 }

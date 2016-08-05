@@ -40,9 +40,9 @@ class PasswordListAdd extends React.Component {
     let request = {
       action: "ADD",
       payload: {
-        key: key,
-        identifier: this.state.identifier,
-        value: this.state.password
+        key: btoa(key),
+        identifier: btoa(this.state.identifier),
+        value: btoa(this.state.password)
       }
     }
 
@@ -181,6 +181,8 @@ class PasswordListEntry extends React.Component {
 
   confirmCopy() {
     // HACK(mnzt): :sick: this is horrible.
+
+    // set classes to make the button green
     this.setState({buttonOK: true})
     setTimeout(function () {
       this.setState({buttonOK: false})
@@ -195,9 +197,9 @@ class PasswordListEntry extends React.Component {
     {/* onHover={ this.showPassword.bind(this) }*/}
     return (
       <tr className="big">
-        <td>{ this.props.identifier }</td>
-        <td ref={ this.props._key  } className="password">
-          { this.props.password }
+        <td>{ atob(this.props.identifier) }</td>
+        <td ref={ atob(this.props._key)  } className="password">
+          { atob(this.props.password) }
         </td>
         <td>
           <span className="btn-group right">

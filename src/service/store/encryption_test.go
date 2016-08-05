@@ -13,14 +13,14 @@ func TestEncrypt(t *testing.T) {
 		t.Error(err)
 	}
 	// Test for 32 byte strings
-	c, err := crypter.Encrypt("something that satisifies 32....")
+	c, err := crypter.Encrypt([]byte("something that satisifies 32...."))
 	if err != nil {
 		t.Error(err)
 	}
 	t.Logf("cipher text: %s", c)
 
 	// Test for sub-32 bytes with padding
-	c1, err := crypter.Encrypt("this is odd")
+	c1, err := crypter.Encrypt([]byte("this is odd"))
 	if err != nil {
 		t.Error(err)
 	}
@@ -35,7 +35,7 @@ func TestEncrypt(t *testing.T) {
 		t.Error(err)
 	}
 
-	_, err = nokeyCrypter.Encrypt("test")
+	_, err = nokeyCrypter.Encrypt([]byte("test"))
 	if err != nil {
 		t.Error(err)
 	}
@@ -50,13 +50,13 @@ func TestDecrypt(t *testing.T) {
 		t.Error(err)
 	}
 
-	plaintext, err := crypter.Decrypt(cipherText)
+	plaintext, err := crypter.Decrypt([]byte(cipherText))
 	if err != nil {
 		t.Error(err)
 	}
 
 	expected := "something that satisifies 32...."
-	if plaintext != expected {
+	if string(plaintext) != expected {
 		t.Errorf("error expected %s got %s", expected, plaintext)
 	}
 
