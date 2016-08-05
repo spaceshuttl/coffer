@@ -52,5 +52,5 @@ Coffer stores all passwords within a local file (`~/.coffer/store.bolt` by defau
 - [ ] Implement some store to hold the WS connection
 
 ### Meta
+- [X] Create build + packing system
 - [ ] Add bower dependency management system
-- [ ] Create build + packing system

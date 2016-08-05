@@ -59,7 +59,7 @@ app.on('ready', function() {
   })
 
   // Remove the app menu
-  win.setMenu(null)
+  win.setMenuBarVisibility(false)
 
   // load the application page
   win.loadURL(`file://${__dirname}/index.html`);

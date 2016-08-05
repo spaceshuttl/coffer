@@ -1,11 +1,32 @@
- .password {
-    -webkit-text-security: disc;
+::-webkit-scrollbar {
+    height: .33em;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+
+.password {
+  max-width: 30rem;
+  overflow-x: hidden;
+  white-space: nowrap;
+
+  -webkit-text-security: disc;
        -mos-text-security: disc;
             text-security: disc;
-    &:hover{
-      -webkit-text-security: none;
-         -mos-text-security: none;
-              text-security: none;
+
+  &:hover{
+    overflow-x: scroll;
+
+    -webkit-text-security: none;
+       -mos-text-security: none;
+            text-security: none;
     }
  }
 
