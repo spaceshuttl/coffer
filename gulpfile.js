@@ -18,7 +18,7 @@ gulp.task('less', function () {
 
 gulp.task('react', function () {
   browserify({
-    entries: __dirname + '/src/app/src/index.jsx',
+    entries: __dirname + '/src/app/src/main.jsx',
     extensions: ['.jsx'],
     debug: true
   })
@@ -29,7 +29,7 @@ gulp.task('react', function () {
 });
 
 
-gulp.task('default', ['less', 'react'], function () {
+gulp.task('default', ['less', 'react', 'build'], function () {
   gulp.watch("./src/app/src/less/**/*.less", ['less'])
   gulp.watch("./src/app/src/**/*.jsx", ['react'])
 })

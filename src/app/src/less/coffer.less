@@ -1,14 +1,11 @@
  .password {
-    .transition(text-security .5s ease-out);
-
     -webkit-text-security: disc;
-    -mos-text-security: disc;
-    text-security: disc;
-
+       -mos-text-security: disc;
+            text-security: disc;
     &:hover{
       -webkit-text-security: none;
-      -mos-text-security: none;
-      text-security: none;
+         -mos-text-security: none;
+              text-security: none;
     }
  }
 
@@ -17,3 +14,10 @@
  	.make-btn(#f23d3d, 10);
   .transition(all .17s ease-in-out);
  }
+
+.confirmed {
+  .transition(all .17s ease-in-out);
+  background: @color-success !important;
+  border-color: @color-success !important;
+  color: rgba(255, 255, 255, .9) !important;
+}
