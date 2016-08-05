@@ -1,6 +1,6 @@
 *Coffer is very much in development - and should not be used to store import information*
 
-![](screenshot.jpg)
+![](screenshot.png)
 
 Coffer is a light weight password manager built with Go, React, and Electron.
 
