@@ -2,46 +2,45 @@
 const electron      = require('electron')
 const child_process = require('child_process')
 const os            = require('os')
-const coffer        = electron.app  // Module to control application life.
-const BrowserWindow = electron.BrowserWindow  // Module to create native browser window.
+const {BrowserWindow, app} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-var mainWindow = null
+var win = null
 
 // Quit when all windows are closed.
-coffer.on('window-all-closed', function() {
-  coffer.quit()
+app.on('window-all-closed', function() {
+  app.quit()
 })
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-coffer.on('ready', function() {
-  var platform = ""
-  // get our operating system
-  if (os.type() == 'Linux') {
-    platform = "/service"
-  } else if (os.type() == 'Darwin') {
-    platform = "/service"
-  } else if (os.type() == 'Windows_NT') {
-    platform = "/service.exe"
-  }
-
-  // start the backend
-  var service = child_process.execFile(__dirname + platform, {
-    env: {
-      "LEVEL": "debug"
-    }
-  }, (error, stdout, stderr) => {
-    if(error) {
-      console.log(error)
-      coffer.quit
-    }
-  })
+app.on('ready', function() {
+  // var platform = ""
+  // // get our operating system
+  // if (os.type() == 'Linux') {
+  //   platform = "/service"
+  // } else if (os.type() == 'Darwin') {
+  //   platform = "/service"
+  // } else if (os.type() == 'Windows_NT') {
+  //   platform = "/service.exe"
+  // }
+  //
+  // // start the backend
+  // var service = child_process.execFile(__dirname + platform, {
+  //   env: {
+  //     "LEVEL": "debug"
+  //   }
+  // }, (error, stdout, stderr) => {
+  //   if(error) {
+  //     console.log(error)
+  //     app.quit
+  //   }
+  // })
 
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({
+  let win = new BrowserWindow({
     title: "Coffer",
     width: 800,
     height: 600,
@@ -49,20 +48,24 @@ coffer.on('ready', function() {
     center: true,
   })
 
+  win.on('closed', function() {
+    win = null
+  })
+
+  win.once('ready-to-show', () => {
+    win.show()
+  })
+
+  // Remove the app menu
+  win.setMenu(null)
+
   // load the application page
-  mainWindow.loadURL('file://' + __dirname + '/index.html')
+  win.loadURL(`file://${__dirname}/index.html`);
 
   // Open the DevTools.
 
   if (process.env.DEBUG === "true") {
-    mainWindow.webContents.openDevTools()
+    win.webContents.openDevTools()
   }
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function() {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
 })
