@@ -13,8 +13,8 @@ import (
 var (
 	path, _ = os.Getwd()
 
-	bucket    = []byte("store")
-	configDir string
+	masterBucket = []byte("store")
+	configDir    string
 )
 
 // Datastore is the interface for a store
@@ -64,20 +64,20 @@ func Start() (*Store, error) {
 	configDir = fmt.Sprintf("%s/.coffer/", usr.HomeDir)
 
 	// Create our store
+
+	logrus.Debugf("opening store at %s", configDir+"store.bolt")
 	db, err := bolt.Open(configDir+"store.bolt", 0666, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	// Create our master bucket
-	err = db.Update(func(tx *bolt.Tx) error {
-		_, err = tx.CreateBucketIfNotExists(bucket)
-		if err != nil {
+	if err = db.Update(func(tx *bolt.Tx) error {
+		if _, err = tx.CreateBucketIfNotExists(masterBucket); err != nil {
 			return err
 		}
 		return nil
-	})
-	if err != nil {
+	}); err != nil {
 		return nil, err
 	}
 
@@ -85,6 +85,7 @@ func Start() (*Store, error) {
 		DB:      db,
 		Crypter: crypter,
 	}, nil
+
 }
 
 // IsNewInstall will return whether a
@@ -127,15 +128,15 @@ func (s *Store) IsNewInstall() bool {
 
 // All will return all entries from the database
 func (s *Store) All() ([]*Entry, error) {
-	entries := []*Entry{}
+	var entries []*Entry
 
 	// Read the store
+	logrus.Debugf("Opening database...")
 	err := s.DB.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket(masterBucket)
 
-		// Open our master bucket
-		bucket := tx.Bucket(bucket)
 		// Range over all key/values in our master bucket
-		err := bucket.ForEach(func(k, v []byte) error {
+		return bucket.ForEach(func(k, v []byte) error {
 			var entry Entry
 
 			// Open an account bucket
@@ -143,7 +144,7 @@ func (s *Store) All() ([]*Entry, error) {
 			entry.ID = string(k)
 
 			bkt := bucket.Bucket(k)
-			err := bkt.ForEach(func(k, v []byte) error {
+			if err := bkt.ForEach(func(k, v []byte) error {
 
 				switch string(k) {
 				case "key":
@@ -153,22 +154,14 @@ func (s *Store) All() ([]*Entry, error) {
 				}
 
 				return nil
-			})
-
-			// Add our found entry to the slice
-			entries = append(entries, &entry)
-
-			if err != nil {
+			}); err != nil {
 				return err
 			}
 
+			// Add our found entry to the slice
+			entries = append(entries, &entry)
 			return nil
 		})
-		if err != nil {
-			return err
-		}
-
-		return nil
 	})
 
 	// Check if our transaction errored
@@ -199,61 +192,36 @@ func (s *Store) Put(e *Entry) error {
 	e.Value = cipherValue
 
 	// Update the store
-	err = s.DB.Update(func(tx *bolt.Tx) error {
+	return s.DB.Update(func(tx *bolt.Tx) error {
 
 		// Open our bucket
-		masterBucket, tErr := tx.CreateBucketIfNotExists(bucket)
-		if tErr != nil {
-			return tErr
-		}
+		bucket := tx.Bucket(masterBucket)
 
 		// Create our key-specific bucket
-		bucket, tErr := masterBucket.CreateBucketIfNotExists(e.bucketID())
-		if tErr != nil {
-			return tErr
-		}
-
-		tErr = bucket.Put([]byte("key"), toStore(e.Key))
-		if tErr != nil {
-			return tErr
-		}
-
-		tErr = bucket.Put([]byte("value"), toStore(e.Value))
-		if tErr != nil {
-			return tErr
-		}
-
-		return nil
-	})
-
-	// Check if the transaction errored
-	if err != nil {
-		return err
-	}
-
-	// Return A-OK on that transaction
-	return nil
-}
-
-// Delete will remove an entry from the store
-func (s *Store) Delete(e *Entry) error {
-	err := s.DB.Update(func(tx *bolt.Tx) error {
-		bucket := tx.Bucket(bucket)
-
-		// Delete the entry bucket
-		logrus.Debugf("deleting bucket %s", e.ID)
-		err := bucket.DeleteBucket(toStore(e.ID))
+		bucket, err := bucket.CreateBucketIfNotExists(e.bucketID())
 		if err != nil {
 			return err
 		}
 
-		return nil
-	})
+		err = bucket.Put([]byte("key"), toStore(e.Key))
+		if err != nil {
+			return err
+		}
 
-	if err != nil {
-		return err
-	}
-	return nil
+		return bucket.Put([]byte("value"), toStore(e.Value))
+
+	})
+}
+
+// Delete will remove an entry from the store
+func (s *Store) Delete(e *Entry) error {
+	return s.DB.Update(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket(masterBucket)
+
+		// Delete the entry bucket
+		logrus.Debugf("deleting bucket %s", e.ID)
+		return bucket.DeleteBucket(e.bucketID())
+	})
 }
 
 /**
