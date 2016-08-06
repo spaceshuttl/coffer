@@ -17,27 +17,20 @@ func TestEncrypt(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("cipher text: %s", c)
 
 	// Test for sub-32 bytes with padding
-	c1, err := crypter.Encrypt([]byte("this is odd"))
+	_, err = crypter.Encrypt([]byte("this is odd"))
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("cipher text: %s", c1)
 
 	/*
 	 *	Test the key generation
 	 */
 
-	nokeyCrypter, err := InitaliaseCrypter("")
-	if err != nil {
-		t.Error(err)
-	}
-
-	_, err = nokeyCrypter.Encrypt([]byte("test"))
-	if err != nil {
-		t.Error(err)
+	_, err = InitaliaseCrypter("")
+	if err == nil {
+		t.Errorf("expected %v got %v", err, nil)
 	}
 
 	// Push out cipher to a varible to decrypt

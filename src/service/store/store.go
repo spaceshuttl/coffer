@@ -55,27 +55,6 @@ func Start() (*Store, error) {
 		DB:      db,
 		Crypter: crypter,
 	}, nil
-
-}
-
-// DBExists checks if an existing db file exists
-func DBExists() bool {
-	_, err := os.Open(configDir + "dbFileName")
-	if err != nil {
-		return false
-	}
-	return true
-}
-
-// InitialiseStore will create the config dir and db file
-func InitialiseStore() error {
-	err := os.Mkdir(configDir, 0744)
-	if err != nil {
-		return err
-	}
-
-	_, err = os.Create(configDir + dbFileName)
-	return err
 }
 
 // All will return all entries from the database
@@ -173,4 +152,24 @@ func (s *Store) Delete(e *Entry) error {
 		logrus.Debugf("deleting bucket %s", e.ID)
 		return bucket.DeleteBucket(e.ID)
 	})
+}
+
+// DBExists checks if an existing db file exists
+func DBExists() bool {
+	_, err := os.Open(configDir + "dbFileName")
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+// InitialiseStore will create the config dir and db file
+func InitialiseStore() error {
+	err := os.Mkdir(configDir, 0744)
+	if err != nil {
+		return err
+	}
+
+	_, err = os.Create(configDir + dbFileName)
+	return err
 }

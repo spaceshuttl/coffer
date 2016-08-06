@@ -6,10 +6,11 @@ import "github.com/boltdb/bolt"
 type Datastore interface {
 	All() ([]*Entry, error)
 	Put(e *Entry) error
-	Delete(id *Entry) error
+	Delete(e *Entry) error
 }
 
-// Store holds the Bolt database
+// Store holds the Bolt database and our Crypter. It should satisfy the
+// Datastore interface
 type Store struct {
 	DB      *bolt.DB
 	Crypter *Crypter
@@ -21,21 +22,6 @@ type Entry struct {
 	Key   []byte `json:"identifier"`
 	Value []byte `json:"value"`
 }
-
-// BucketID returns a byte slice of an entry's ID
-// func (e *Entry) BucketID() []byte {
-// 	return []byte(e.ID)
-// }
-//
-// // EntryValue returns a byte slice of an entry's Value
-// func (e *Entry) EntryValue() []byte {
-// 	return []byte(e.Value)
-// }
-//
-// // EntryKey returns a byte slice of an entry's Key
-// func (e *Entry) EntryKey() []byte {
-// 	return []byte(e.Key)
-// }
 
 // LoginRequest is the request we receive when a user enters their master
 // password into the front end

@@ -33,7 +33,7 @@ var (
 
 	wg sync.WaitGroup
 
-	dataStore *store.Store
+	dataStore store.Datastore
 
 	usr, _  = user.Current()
 	baseDir = usr.HomeDir + "/.coffer"
@@ -41,8 +41,8 @@ var (
 
 // Start initialises the routes and started a listener
 func Start(port string, ds *store.Store) error {
-
 	dataStore = ds
+
 	logrus.Debugf("starting router on port %s", port)
 
 	http.HandleFunc("/", handler)
