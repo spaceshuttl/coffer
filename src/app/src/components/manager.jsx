@@ -21,6 +21,7 @@ class PasswordListAdd extends React.Component {
    this.setState({identifier: e.target.value});
   }
 
+
   handlePassword(e) {
      this.setState({password: e.target.value});
   }

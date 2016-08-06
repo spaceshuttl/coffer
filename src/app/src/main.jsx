@@ -10,9 +10,9 @@ import About from './pages/about'
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={Container}>
-      <IndexRoute component={Login} />
-      <Route path="about" component={About} />
-      <Route path="manager" component={Manager} />
+      <IndexRoute   component={Login} />
+      <Route        component={Manager}  path="manager"/>
+      <Route        component={About}    path="about"/>
     </Route>
   </Router>,
   document.getElementById('app')

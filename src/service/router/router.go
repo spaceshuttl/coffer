@@ -26,8 +26,8 @@ const (
 
 var (
 	upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
+		ReadBufferSize:  2048,
+		WriteBufferSize: 2048,
 		CheckOrigin:     func(r *http.Request) bool { return true },
 	}
 
@@ -43,18 +43,10 @@ var (
 func Start(port string, ds *store.Store) error {
 
 	dataStore = ds
-	http.HandleFunc("/", handler)
-
 	logrus.Debugf("starting router on port %s", port)
 
+	http.HandleFunc("/", handler)
 	http.ListenAndServe(":"+port, nil)
-
-	// TODO(mnzt): serve WS over TLS
-	// certFile, keyFile, err := generateCerts()
-	// if err != nil {
-	// 	return err
-	// }
-	// http.ListenAndServeTLS(":"+port, certFile, keyFile, nil)
 
 	return nil
 }
@@ -66,40 +58,50 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	wg.Add(1)
-	go connhandler(conn)
-}
-
-func connhandler(conn *websocket.Conn) {
+	defer conn.Close()
 	for {
-		var m *Message
+		var (
+			m *Message
+		)
 
 		if err := conn.ReadJSON(&m); err != nil {
-			logrus.Error(err)
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
+				logrus.Error(err)
+			}
+			break
 		}
 
 		switch m.Action {
 		case ALL:
 			resp, err := handleAll(m)
+			if err != nil {
+				logrus.Error(err)
+			}
+
 			conn.WriteJSON(Response{
 				Error:   err,
 				Message: resp,
 			})
-
 		case ADD:
 			resp, err := handleAdd(m)
+			if err != nil {
+				logrus.Error(err)
+			}
+
 			conn.WriteJSON(Response{
 				Error:   err,
 				Message: resp,
 			})
-
 		case DELETE:
 			resp, err := handleDelete(m)
+			if err != nil {
+				logrus.Error(err)
+			}
+
 			conn.WriteJSON(Response{
 				Error:   err,
 				Message: resp,
 			})
-
 		default:
 			conn.WriteJSON(Response{
 				Error: ErrInvalidAction,
