@@ -54,3 +54,11 @@ func TestDecrypt(t *testing.T) {
 	}
 
 }
+
+func TestPad(t *testing.T) {
+	in := []byte("memes")
+	resp := pad(in)
+	if string(resp) != "memes000000000000000000000000000" {
+		t.Errorf("got incorrect padding length of %v", len(resp))
+	}
+}

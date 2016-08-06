@@ -7,6 +7,7 @@ type Datastore interface {
 	All() ([]*Entry, error)
 	Put(e *Entry) error
 	Delete(e *Entry) error
+	AddCrypter(c *Crypter)
 }
 
 // Store holds the Bolt database and our Crypter. It should satisfy the
@@ -21,6 +22,8 @@ type Entry struct {
 	ID    []byte `json:"key"`
 	Key   []byte `json:"identifier"`
 	Value []byte `json:"value"`
+
+	Password string `json:"password,omitempty"`
 }
 
 // LoginRequest is the request we receive when a user enters their master

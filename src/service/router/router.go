@@ -13,14 +13,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// Websocket actions
 const (
-	// ADD is the action to add an entry to the store
-	ADD = "ADD"
-	// ALL is the action to get all entries from the store
-	ALL = "ALL"
-	// GET is the action to get entries to the store
-	GET = "GET"
-	// DELETE is the action to delete an entry from the store
+	LOGIN  = "LOGIN"
+	ADD    = "ADD"
+	ALL    = "ALL"
+	GET    = "GET"
 	DELETE = "DELETE"
 )
 
@@ -72,6 +70,16 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		switch m.Action {
+		case LOGIN:
+			err := handleLogin(m)
+			if err != nil {
+				logrus.Error(err)
+			}
+
+			conn.WriteJSON(Response{
+				Error: err,
+			})
+
 		case ALL:
 			resp, err := handleAll(m)
 			if err != nil {

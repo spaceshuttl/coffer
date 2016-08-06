@@ -6,6 +6,24 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// TODO: implement
+func handleLogin(m *Message) error {
+	// logrus.WithFields(logrus.Fields{
+	// 	"action":   m.Action,
+	// 	"password": m.Payload.Password,
+	// }).Debug("received websocket request")
+	//
+	// // Initialise our crypter
+	// crypter, err := store.InitaliaseCrypter(m.Payload.Password)
+	// if err != nil {
+	// 	logrus.Error(err)
+	// 	return err
+	// }
+	//
+	// dataStore.AddCrypter(crypter)
+	return nil
+}
+
 func handleAll(m *Message) ([]*store.Entry, error) {
 	logrus.WithFields(logrus.Fields{
 		"action": m.Action,

@@ -1,11 +1,10 @@
 deps:
 	rm -rf node_modules
-	npm i --production
+	npm i
+	npm i -g electron-packager electron
 
 	go get github.com/constabulary/gb/...
 	gb vendor restore
-	npm i
-	npm i -g electron-packager
 
 test:
 	gb test

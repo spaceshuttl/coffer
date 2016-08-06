@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
+import { ws } from '../components/websocket.jsx'
 
 class Login extends React.Component {
   constructor(props) {
     super(props)
     this.props = props
-    
+
     this.state = {
       master: "",
     }
@@ -29,13 +30,12 @@ class Login extends React.Component {
    let request = {
      action: "LOGIN",
      payload: {
-       master: this.state.master,
+       password: this.state.master,
      }
    }
 
-  //  ws.send(JSON.stringify(request))
-
    console.log(request);
+   ws.send(JSON.stringify(request))
 
    // on success coninue to the manager
    this.props.history.push('manager');

@@ -1,9 +1,7 @@
 'use strict'
 import React, { PropTypes } from 'react'
 import ClassName from 'classnames'
-
-// +1 to mrtbstyle
-var ws = new WebSocket("ws://localhost:5050");
+import { ws } from './websocket.jsx'
 
 class PasswordListAdd extends React.Component {
 
@@ -200,7 +198,7 @@ class PasswordListEntry extends React.Component {
       <tr className="big">
         <td>{ atob(this.props.identifier) }</td>
         <td ref={ atob(this.props._key)  } className="password">
-          { atob(this.props.password) }
+          <span>{ atob(this.props.password) }</span>
         </td>
         <td>
           <span className="btn-group right">

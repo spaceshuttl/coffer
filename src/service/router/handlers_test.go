@@ -18,7 +18,7 @@ func (ms *MockStore) All() ([]*store.Entry, error) {
 }
 func (ms *MockStore) Put(e *store.Entry) error    { return nil }
 func (ms *MockStore) Delete(e *store.Entry) error { return nil }
-
+func (ms *MockStore) AddCrypter(c *store.Crypter) { return }
 func init() {
 	dataStore = &MockStore{}
 }

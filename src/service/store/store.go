@@ -27,16 +27,14 @@ func Start() (*Store, error) {
 		}
 	}
 
-	// Initialise our crypter
-	crypter, err := InitaliaseCrypter("one really really secure key... ")
+	// Create our store
+	logrus.Debugf("opening store at %s", configDir+"dbFileName")
+	db, err := bolt.Open(configDir+"dbFileName", 0666, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	// Create our store
-
-	logrus.Debugf("opening store at %s", configDir+"dbFileName")
-	db, err := bolt.Open(configDir+"dbFileName", 0666, nil)
+	crypter, err := InitaliaseCrypter("some password")
 	if err != nil {
 		return nil, err
 	}
@@ -55,6 +53,11 @@ func Start() (*Store, error) {
 		DB:      db,
 		Crypter: crypter,
 	}, nil
+}
+
+// AddCrypter will set the crypter to call methods on
+func (s *Store) AddCrypter(c *Crypter) {
+	s.Crypter = c
 }
 
 // All will return all entries from the database
@@ -156,7 +159,7 @@ func (s *Store) Delete(e *Entry) error {
 
 // DBExists checks if an existing db file exists
 func DBExists() bool {
-	_, err := os.Open(configDir + "dbFileName")
+	_, err := os.Open(configDir + dbFileName)
 	if err != nil {
 		return false
 	}
@@ -165,9 +168,10 @@ func DBExists() bool {
 
 // InitialiseStore will create the config dir and db file
 func InitialiseStore() error {
-	err := os.Mkdir(configDir, 0744)
-	if err != nil {
-		return err
+
+	_, err := os.Stat(configDir)
+	if err == nil {
+		os.Mkdir(configDir, 0744)
 	}
 
 	_, err = os.Create(configDir + dbFileName)

@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	padText   = []byte("0")
+	padText   byte = '0'
 	masterKey string
 )
 
@@ -36,7 +36,7 @@ func InitaliaseCrypter(keyString string) (*Crypter, error) {
 			"original": keyString,
 		}).Debug("padding crypter key")
 
-		key = pad([]byte(keyString), 32)
+		key = pad([]byte(keyString))
 	}
 
 	block, err := aes.NewCipher(key)
@@ -57,7 +57,7 @@ func (c *Crypter) Encrypt(p []byte) (string, error) {
 		"value": p,
 	}).Debug("encrypting value")
 
-	p = pad(p, -1)
+	p = pad(p)
 
 	ciphertext := make([]byte, aes.BlockSize+len(p))
 	iv := ciphertext[:aes.BlockSize]
@@ -133,15 +133,21 @@ func (c *Crypter) Decrypt(cipherhex []byte) ([]byte, error) {
 }
 
 // Pad providers a left padding function.
-func pad(text []byte, length int) []byte {
-	if length <= 0 {
-		length = aes.BlockSize - (len(text) % aes.BlockSize)
-	}
+func pad(text []byte) []byte {
+	var (
+		// Hard coded AES-256
+		length  = 32
+		newText = make([]byte, length)
+	)
 
 	for i := 0; i < length; i++ {
-		text = append(text, padText...)
+		if i < len(text) {
+			newText[i] = text[i]
+			continue
+		}
+		newText[i] = padText
 	}
-	return text
+	return newText
 }
 
 // Unpad will remove the padding
