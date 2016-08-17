@@ -3,18 +3,18 @@ package store
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
 	"encoding/hex"
 	"errors"
-	"io"
+	"math/rand"
 	"strings"
 
 	"github.com/sirupsen/logrus"
 )
 
 var (
-	padText   byte = '0'
-	masterKey string
+	padText     byte = '0'
+	masterKey   string
+	letterBytes = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%&()*+,-./:;<=>?@[]^_`{|}~"
 )
 
 // Crypter the the top level crypter used for encrypting and decrypting store values
@@ -52,84 +52,56 @@ func InitaliaseCrypter(keyString string) (*Crypter, error) {
 
 // Encrypt will use the crypter's keys and other values and encrypt p
 func (c *Crypter) Encrypt(p []byte) (string, error) {
+	var (
+		dst []byte
+	)
 
-	logrus.WithFields(logrus.Fields{
-		"value": p,
-	}).Debug("encrypting value")
-
-	p = pad(p)
-
-	ciphertext := make([]byte, aes.BlockSize+len(p))
-	iv := ciphertext[:aes.BlockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		panic(err)
+	mode, err := cipher.NewGCM(c.block)
+	if err != nil {
+		return "", err
 	}
 
-	mode := cipher.NewCBCEncrypter(c.block, iv)
-	mode.CryptBlocks(ciphertext[aes.BlockSize:], p)
-
-	// blockmode := cipher.NewCBCEncrypter(c.block, iv)
-	henc := hex.EncodeToString(ciphertext)
-
-	// TODO: authenticated encryption
-	// block, err := aes.NewCipher([]byte(c.key))
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
-	//
-	// nonce := make([]byte, 12)
-	// if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
-	// 	panic(err.Error())
-	// }
-	//
-	// aesgcm, err := cipher.NewGCM(block)
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
-	//
-	// ciphertext := aesgcm.Seal(nil, nonce, []byte(p), nil)
-	// fmt.Printf("%x\n", ciphertext)
-	//
-	// henc := hex.EncodeToString(ciphertext)
-
-	return henc, nil
-}
-
-// Decrypt will use the crypter's keys and other values and descrypt p
-func (c *Crypter) Decrypt(cipherhex []byte) ([]byte, error) {
-	var (
-		hexcipher = make([]byte, hex.DecodedLen(len(cipherhex)))
+	dst = mode.Seal(
+		dst,
+		randStr(mode.NonceSize()),
+		p,
+		nil,
 	)
 
 	logrus.WithFields(logrus.Fields{
-		"value": cipherhex,
-	}).Debug("decrypting value")
+		"original": string(p),
+	}).Debug("encrypting value")
 
-	hex.Decode(hexcipher, cipherhex)
+	return string(dst), nil
+}
 
-	_, err := hex.Decode(hexcipher, cipherhex)
+// Decrypt will use the crypter's keys and other values and descrypt p
+func (c *Crypter) Decrypt(ciphertext []byte) ([]byte, error) {
+	var (
+		dst           []byte
+		ciphertextHex []byte
+	)
+
+	logrus.Debug("decrypting value")
+	hex.Decode(ciphertextHex, ciphertext)
+
+	mode, err := cipher.NewGCM(c.block)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(hexcipher) < aes.BlockSize {
-		panic("ciphertext too short")
+	dst, err = mode.Open(
+		dst,
+		randStr(mode.NonceSize()),
+		ciphertextHex,
+		nil,
+	)
+
+	if err != nil {
+		return nil, err
 	}
 
-	iv := hexcipher[:aes.BlockSize]
-	plaintext := hexcipher[aes.BlockSize:]
-
-	// CBC mode always works in whole blocks.
-	if len(plaintext)%aes.BlockSize != 0 {
-		panic("ciphertext is not a multiple of the block size")
-	}
-
-	mode := cipher.NewCBCDecrypter(c.block, iv)
-	mode.CryptBlocks(plaintext, plaintext)
-
-	s := string(plaintext)
-
-	return unpad(s), nil
+	return dst, nil
 }
 
 // Pad providers a left padding function.
@@ -153,6 +125,14 @@ func pad(text []byte) []byte {
 // Unpad will remove the padding
 func unpad(text string) []byte {
 	return []byte(strings.Replace(text, string(padText), "", -1))
+}
+
+func randStr(n int) []byte {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return b
 }
 
 // Errors

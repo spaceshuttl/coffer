@@ -1,12 +1,14 @@
 'use strict'
 import React, { PropTypes } from 'react'
 import ClassName from 'classnames'
-import { ws } from './websocket.jsx'
+import websocket from './websocket.jsx'
 
 class PasswordListAdd extends React.Component {
 
   constructor(props) {
     super(props)
+
+    this.ws = new websocket()
     this.state = {
       key: "",
       identifier: "",
@@ -46,11 +48,10 @@ class PasswordListAdd extends React.Component {
     }
 
     // check if the fields are empty
-    console.log(request);
     if (this.state.password === "" || this.state.identifier === "") {
       // TODO(mnzt): Send a flash notification warning of empty fields
     } else {
-      ws.send(JSON.stringify(request))
+      this.ws.send(request)
 
       // reset the form
       ReactDOM.findDOMNode(this.refs.identifier).value = ""; // Unset the value
@@ -102,6 +103,7 @@ class PasswordList extends React.Component {
   constructor() {
     super()
 
+    this.ws = new websocket()
     this.state = {
             accounts: []
     }
@@ -110,24 +112,18 @@ class PasswordList extends React.Component {
       action: "ALL"
     }
 
-    ws.onopen = () => {
-      ws.send(JSON.stringify(request))
+    this.ws.onopen = () => {
+      this.ws.send(request)
     }
   }
 
   componentDidMount() {
-    ws.addEventListener('message', (event) => {
-      let response = JSON.parse(event.data)
-
-      if (response.error) {
-        {/* TODO(mnzt): display a flash notification of the error*/}
-        console.error(response.error)
-      }
-      this.setState({
-        accounts: response.message
+    this.ws.listen()
+      .then((response) => {
+        this.setState({
+          accounts: response.message
+        })
       })
-
-    })
   }
 
   render() {
@@ -160,6 +156,8 @@ class PasswordList extends React.Component {
 class PasswordListEntry extends React.Component {
   constructor(props) {
     super(props);
+
+    this.ws = new websocket()
     this.props = props
     this.state = {
       buttonOK: false,
@@ -174,8 +172,7 @@ class PasswordListEntry extends React.Component {
       }
     }
 
-    console.log(data)
-    ws.send(JSON.stringify(data))
+    this.ws.send(data)
   }
 
   confirmCopy() {
