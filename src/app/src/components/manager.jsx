@@ -1,4 +1,3 @@
-'use strict'
 import React, { PropTypes } from 'react'
 import ClassName from 'classnames'
 import websocket from './websocket.jsx'
