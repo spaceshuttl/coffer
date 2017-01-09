@@ -5,4 +5,25 @@ Coffer [![Build Status](https://drone.io/github.com/spaceshuttl/coffer/status.pn
   <img src="https://spaceshuttl.io/coffer.svg" width="100%" height="144">
 </a>
 
-<div style="text-align:center"><b style="font-size:22px">A Simplistic Secret Store</b></div>
+<p align="center">
+  <b>A Simplistic Secret Store</b>
+</p>
+
+
+### What Coffer is
+
+### What Coffer is not
+
+### Installing
+
+Coffer is go get'able, you can easily install it into your GOPATH with:
+```bash
+go get -u github.com/spaceshuttl/coffer
+```
+
+You can also run Coffer on Docker (TBC) via the following
+```
+docker run spaceshuttl/coffer:latest
+```
+
+### Contributing 
