@@ -1,4 +1,4 @@
-Coffer [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/spaceshuttl/coffer) [![Build Status](https://drone.io/github.com/spaceshuttl/coffer/status.png)](https://drone.io/github.com/spaceshuttl/coffer/latest) [![Go Report Card](https://goreportcard.com/badge/github.com/spaceshuttl/coffer)](https://goreportcard.com/report/github.com/spaceshuttl/coffer)
+Coffer [![Build Status](https://drone.io/github.com/spaceshuttl/coffer/status.png)](https://drone.io/github.com/spaceshuttl/coffer/latest) [![Go Report Card](https://goreportcard.com/badge/github.com/spaceshuttl/coffer)](https://goreportcard.com/report/github.com/spaceshuttl/coffer) [![Dependency Status](https://dependencyci.com/github/spaceshuttl/coffer/badge)](https://dependencyci.com/github/spaceshuttl/coffer)
 ---
 
 <a href="https://github.com/spaceshuttl/coffer/">
