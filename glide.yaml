@@ -1,3 +1,14 @@
 package: github.com/spaceshuttl/coffer
+homepage: https://github.com/spaceshuttl/coffer
+license: GPL-3.0
+owners:
+- name: Toby Archer
+  email: toby@spaceshuttl.io
+  homepage: https://github.com/mnzt
+- name: Awn Umar
+  email: libeclipse@gmail.com
+  homepage: https://github.com/libeclipse
 import:
 - package: github.com/mitchellh/cli
+testImport:
+- package: github.com/stretchr/testify/assert
