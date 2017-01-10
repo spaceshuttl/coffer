@@ -12,3 +12,4 @@ import:
 - package: github.com/mitchellh/cli
 testImport:
 - package: github.com/stretchr/testify/assert
+  version: ~v1.1.4

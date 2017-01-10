@@ -1,5 +1,5 @@
-hash: 5dc61bbaa2ec69452a7cb82be54c5affc59dec059828fccc2dcd2a94f3a7b396
-updated: 2017-01-10T22:30:22.956629591Z
+hash: e717fd748079d40724d3f2645a8f3aed92dd55e7b37a4b3f0a447603f2cf5afe
+updated: 2017-01-10T22:34:46.232595747Z
 imports:
 - name: github.com/armon/go-radix
   version: 4239b77079c7b5d1243b7b4736304ce8ddb6f0f2
@@ -15,6 +15,6 @@ imports:
   - unix
 testImports:
 - name: github.com/stretchr/testify
-  version: 2402e8e7a02fc811447d11f881aa9746cdc57983
+  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
   - assert
