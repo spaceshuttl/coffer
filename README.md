@@ -30,6 +30,6 @@ You can also run Coffer on Docker (TBC) via the following
 docker run spaceshuttl/coffer:latest
 ```
 
-### Contributing
+### [Contributing](CONTRIBUTORS.md)
 Contributions are encouraged, and we ask nicely to follow our workflow when submitting issues,
 opening pull requests, or generally working on Coffer. You can find
