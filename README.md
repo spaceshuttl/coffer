@@ -11,12 +11,12 @@ Coffer [![Build Status](https://drone.io/github.com/spaceshuttl/coffer/status.pn
 
 
 ### What Coffer is
-Coffer is a lightweight note keeper, we like to call it a 'note bucket'. Coffer
-includes essential features for managing notes, with its most powerful feature
-being fuzzy searching across notes.
 
-##### * What Coffer is not
-Coffer is not designed to store highly sensitive information.. You should not store your Credit Card numbers, bank account login, or Club Penguin password here
+Coffer is a lightweight note keeper: a 'note bucket' if you will. Coffer includes essential features for managing notes, with its most powerful feature being fuzzy searching across notes.
+
+### What Coffer is not
+
+Coffer is not designed to store highly sensitive information. You should not use it for your credit card numbers, bank account details, or Club Penguin password.
 
 ### Installing
 
