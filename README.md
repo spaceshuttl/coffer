@@ -11,8 +11,12 @@ Coffer [![Build Status](https://drone.io/github.com/spaceshuttl/coffer/status.pn
 
 
 ### What Coffer is
+Coffer is a lightweight note keeper, we like to call it a 'note bucket'. Coffer
+includes essential features for managing notes, with its most powerful feature
+being fuzzy searching across notes.
 
-### What Coffer is not
+#### * What Coffer is not
+Coffer is not a locked down, unbreachable datastore. You should not store your Credit Card numbers, bank account login, or MSN Messenger password here
 
 ### Installing
 
@@ -26,4 +30,4 @@ You can also run Coffer on Docker (TBC) via the following
 docker run spaceshuttl/coffer:latest
 ```
 
-### Contributing 
+### Contributing
