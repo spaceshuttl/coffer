@@ -15,8 +15,8 @@ Coffer is a lightweight note keeper, we like to call it a 'note bucket'. Coffer
 includes essential features for managing notes, with its most powerful feature
 being fuzzy searching across notes.
 
-#### * What Coffer is not
-Coffer is not a locked down, unbreachable datastore. You should not store your Credit Card numbers, bank account login, or MSN Messenger password here
+##### * What Coffer is not
+Coffer is not designed to store highly sensitive information.. You should not store your Credit Card numbers, bank account login, or MSN Messenger password here
 
 ### Installing
 
@@ -31,3 +31,5 @@ docker run spaceshuttl/coffer:latest
 ```
 
 ### Contributing
+Contributions are encouraged, and we ask nicely to follow our workflow when submitting issues,
+opening pull requests, or generally working on Coffer. You can find
