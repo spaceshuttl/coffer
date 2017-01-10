@@ -16,7 +16,7 @@ includes essential features for managing notes, with its most powerful feature
 being fuzzy searching across notes.
 
 ##### * What Coffer is not
-Coffer is not designed to store highly sensitive information.. You should not store your Credit Card numbers, bank account login, or MSN Messenger password here
+Coffer is not designed to store highly sensitive information.. You should not store your Credit Card numbers, bank account login, or Club Penguin password here
 
 ### Installing
 
