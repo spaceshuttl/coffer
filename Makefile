@@ -1,5 +1,10 @@
 default: install test build
 
+deps: update install
+
+update:
+	glide update
+	
 install:
 	glide install
 
