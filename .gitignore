@@ -1,10 +1,2 @@
-store.bolt
-node_modules/
-pkg/
 bin/
-
-dist/
-coffer-*/
-
-*.asar
-bin/
+vendor/

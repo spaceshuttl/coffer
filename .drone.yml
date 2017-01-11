@@ -1,0 +1,19 @@
+workspace:
+  base: /go/
+  path: src/github.com/spaceshuttl/coffer
+
+pipeline:
+  build:
+    image: golang
+    commands:
+      - mkdir /go/bin
+      - curl https://glide.sh/get | sh
+      - make install
+      - make test
+      - make build
+
+  slack:
+    image: plugins/slack
+    webhook: $SLACK_WEBHOOK
+    channel: coffer
+    username: drone
