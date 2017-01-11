@@ -11,3 +11,9 @@ pipeline:
       - make install
       - make test
       - make build
+
+  slack:
+    image: plugins/slack
+    webhook: $SLACK_WEBHOOK
+    channel: coffer
+    username: drone
