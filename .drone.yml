@@ -4,7 +4,7 @@ workspace:
 
 pipeline:
   build:
-    image: golang
+    image: golang:${TAG}
     commands:
       - mkdir /go/bin
       - curl https://glide.sh/get | sh
@@ -12,8 +12,15 @@ pipeline:
       - make test
       - make build
 
-  slack:
+  notify:
     image: plugins/slack
     webhook: $SLACK_WEBHOOK
     channel: coffer
     username: drone
+
+
+matrix:
+  TAG:
+    - 1.7.4
+    - 1.8
+    - latest
