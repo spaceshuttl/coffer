@@ -6,7 +6,7 @@ Coffer [![Build Status](https://drone.io/github.com/spaceshuttl/coffer/status.pn
 </a>
 
 <p align="center">
-  <b>A Simplistic Secret Store</b>
+  <b>A Simplistic Note Store</b>
 </p>
 
 
