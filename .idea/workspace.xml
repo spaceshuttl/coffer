@@ -2,16 +2,37 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c037b77e-577d-4d2d-a31e-108588242a78" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/internal/router/handlers.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/internal/router/handlers_test.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/internal/router/model.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/internal/router/router.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/internal/store/bolt/encryption.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/internal/store/bolt/encryption_test.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/internal/store/bolt/model.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/internal/store/bolt/store.go" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/main.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/components/manager.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/components/notification.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/components/websocket.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/container.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/alerts.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/blocks.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/breadcrumbs.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/buttons.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/coffer.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/forms.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/grid.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/helpers.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/kube.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/labels.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/messages.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/mixins.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/pagination.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/reset.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/tables.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/typography.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/variables.less" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/main.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/pages/about.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/pages/login.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/pages/manager.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/package.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/screenshot.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,7 +42,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="Makefile" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Makefile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="41" lean-forward="false" selection-start-line="4" selection-start-column="41" selection-end-line="4" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -50,21 +82,17 @@
         <option value="$PROJECT_DIR$/internal/store/bolt/store.go" />
         <option value="$PROJECT_DIR$/internal/store/store.go" />
         <option value="$PROJECT_DIR$/cmd/coffer/main.go" />
-        <option value="$PROJECT_DIR$/Makefile" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/frontend/src/components/notification.jsx" />
+        <option value="$PROJECT_DIR$/Makefile" />
       </list>
     </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER">
-    <package-json value="$PROJECT_DIR$/package.json" />
-  </component>
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
-  </component>
-  <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="-22" />
@@ -100,35 +128,7 @@
             <path>
               <item name="coffer" type="b2602c69:ProjectViewProjectNode" />
               <item name="coffer" type="462c0819:PsiDirectoryNode" />
-              <item name="cmd" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="coffer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coffer" type="462c0819:PsiDirectoryNode" />
-              <item name="cmd" type="462c0819:PsiDirectoryNode" />
-              <item name="coffer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="coffer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coffer" type="462c0819:PsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="coffer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coffer" type="462c0819:PsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="coffer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coffer" type="462c0819:PsiDirectoryNode" />
               <item name="internal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="coffer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coffer" type="462c0819:PsiDirectoryNode" />
-              <item name="internal" type="462c0819:PsiDirectoryNode" />
-              <item name="store" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -252,11 +252,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screenshot.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package-lock.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -289,14 +284,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Makefile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="46" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -321,6 +308,35 @@
             <element signature="e#14#144#0" expanded="true" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/components/notification.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="8" lean-forward="false" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/components/Manager.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1836">
+          <caret line="15" column="3" lean-forward="true" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Makefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="41" lean-forward="false" selection-start-line="4" selection-start-column="41" selection-end-line="4" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screenshot.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
   </component>
