@@ -1,39 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c037b77e-577d-4d2d-a31e-108588242a78" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/main.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/components/manager.jsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/components/notification.jsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/components/websocket.jsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/container.jsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/alerts.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/blocks.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/breadcrumbs.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/buttons.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/coffer.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/forms.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/grid.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/helpers.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/kube.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/labels.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/messages.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/mixins.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/pagination.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/reset.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/tables.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/typography.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/less/variables.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/main.jsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/pages/about.jsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/pages/login.jsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/src/pages/manager.jsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/screenshot.png" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
-    </list>
+    <list default="true" id="c037b77e-577d-4d2d-a31e-108588242a78" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,18 +10,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="Makefile" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Makefile">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="41" lean-forward="false" selection-start-line="4" selection-start-column="41" selection-end-line="4" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
